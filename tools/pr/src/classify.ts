@@ -240,7 +240,9 @@ export async function runClassifyOne(num: number, options: ClassifyOptions): Pro
 }
 
 export async function runClassifyAll(options: ClassifyOptions): Promise<void> {
-  const limit = Math.max(1, Math.min(200, Number(options.limit ?? 100) || 100));
+  // Default covers the whole open queue with growth headroom; `gh pr list`
+  // paginates internally so a high cap is cheap.
+  const limit = Math.max(1, Number(options.limit ?? 1000) || 1000);
   const { owner } = await detectRepoSlug();
   const rateBefore = await fetchRateLimit();
   const [fetched, orgMembers] = await Promise.all([

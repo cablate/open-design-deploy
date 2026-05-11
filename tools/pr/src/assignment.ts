@@ -371,7 +371,9 @@ export type AssignmentOptions = {
 };
 
 export async function runAssignment(options: AssignmentOptions): Promise<void> {
-  const limit = Math.max(1, Math.min(200, Number(options.limit ?? 100) || 100));
+  // Default covers the whole open queue with growth headroom; `gh pr list`
+  // paginates internally so a high cap is cheap.
+  const limit = Math.max(1, Number(options.limit ?? 1000) || 1000);
   const { owner } = await detectRepoSlug();
   const userFilterRaw = options.user;
   const meLoginPromise = userFilterRaw === "me" ? fetchCurrentUser() : Promise.resolve(null);

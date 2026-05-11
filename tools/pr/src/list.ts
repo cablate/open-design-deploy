@@ -240,7 +240,10 @@ function applyFilters(prs: Pr[], filters: Filters): Pr[] {
 
 export async function runList(options: ListOptions): Promise<void> {
   const limitRaw = options.limit;
-  const limit = Math.max(1, Math.min(200, Number(limitRaw ?? 100) || 100));
+  // Default is large enough to cover this repo's open queue plus growth
+  // headroom; `gh pr list --limit N` paginates internally so high values
+  // are cheap. Users can pass `--limit <small>` for a truncated preview.
+  const limit = Math.max(1, Number(limitRaw ?? 1000) || 1000);
   const filters = normalizeFilters(options);
 
   const raw = await fetchOpenPrs(limit);

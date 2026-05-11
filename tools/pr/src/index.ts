@@ -23,7 +23,7 @@ cli
   .command("list", "Triage open PRs by lane and review state")
   .option("--json", "print JSON")
   .option("--include-drafts", "include draft PRs")
-  .option("--limit <n>", "limit (1-200, default 100)")
+  .option("--limit <n>", "limit (default 1000; pass a smaller value to truncate)")
   .option("--lane <list>", "lane filter: skill,design-system,craft,contract,docs,default,multi")
   .option("--bucket <list>", "bucket filter: merge-ready,approved-blocked,needs-rebase,changes-requested,new,stale,draft")
   .option("--author <list>", "author login filter (comma-separated)")
@@ -47,7 +47,7 @@ cli
   .option("--user <login>", "filter to one assignee (login or 'me')")
   .option("--unassigned", "list every unassigned PR (default collapses to count)")
   .option("--include-drafts", "include draft PRs (default skips)")
-  .option("--limit <n>", "max open PRs to consider (1-200, default 100)")
+  .option("--limit <n>", "max open PRs to consider (default 1000)")
   .action(async (options: AssignmentOptions) => {
     await runAssignment(options);
   });
@@ -58,7 +58,7 @@ cli
   .option("--json", "with <num>: print JSON to stdout (default is human)")
   .option("--name <stem>", "with --all: filename stem (default: ISO timestamp)")
   .option("--print", "with --all: also print the report JSON to stdout")
-  .option("--limit <n>", "with --all: limit (1-200, default 100)")
+  .option("--limit <n>", "with --all: limit (default 1000; pass a smaller value to truncate)")
   .action(async (numArg: string | undefined, options: ClassifyOptions) => {
     if (options.all) {
       await runClassifyAll(options);
