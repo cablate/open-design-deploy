@@ -169,11 +169,7 @@ async function readSkillRootResources(rootName: 'skills' | 'design-templates'): 
           throw new Error(`${rootName} resource is missing required file: ${filePath}`, { cause: error });
         }
         const frontmatter = parseFrontmatter(filePath, raw);
-        const id = extractYamlScalar(frontmatter, 'name');
-        invariant(
-          id,
-          `${rootName} ${entry.name} is missing required English fallback field: frontmatter name`,
-        );
+        const id = extractYamlScalar(frontmatter, 'name') ?? entry.name;
         assertResourceId(id, `${rootName} ${entry.name}`);
         const description = extractYamlScalar(frontmatter, 'description');
         invariant(
@@ -257,45 +253,66 @@ async function readPromptTemplateResources(): Promise<PromptTemplateResource[]> 
         throw new Error(`Prompt template resource is unreadable: ${filePath}`, { cause: error });
       }
 
-      let raw: Record<string, unknown>;
+      let raw: unknown;
       try {
-        raw = JSON.parse(rawText) as Record<string, unknown>;
+        raw = JSON.parse(rawText);
       } catch (error) {
         throw new Error(`Prompt template JSON is malformed: ${filePath}`, { cause: error });
       }
 
       invariant(
-        typeof raw.id === 'string' && raw.id.trim().length > 0,
-        `Prompt template ${filePath} is missing or has malformed required id`,
-      );
-      assertResourceId(raw.id, `Prompt template ${filePath}`);
-      invariant(
-        typeof raw.title === 'string' && raw.title.trim().length > 0,
-        `Prompt template ${raw.id} is missing required English fallback field: title`,
-      );
-      invariant(
-        typeof raw.summary === 'string' && raw.summary.trim().length > 0,
-        `Prompt template ${raw.id} is missing required English fallback field: summary`,
-      );
-      invariant(
-        typeof raw.category === 'string' && raw.category.trim().length > 0,
-        `Prompt template ${raw.id} is missing or has malformed category metadata`,
-      );
-      invariant(
-        raw.tags == null || Array.isArray(raw.tags),
-        `Prompt template ${raw.id} has malformed tag metadata`,
-      );
-      invariant(
-        !Array.isArray(raw.tags) || raw.tags.every((tag) => typeof tag === 'string' && tag.trim().length > 0),
-        `Prompt template ${raw.id} has malformed tag metadata`,
+        Boolean(raw) && typeof raw === 'object' && !Array.isArray(raw),
+        `Prompt template ${filePath} must be a JSON object`,
       );
 
+      const template = raw as Record<string, unknown>;
+
+      invariant(
+        typeof template.id === 'string' && template.id.trim().length > 0,
+        `Prompt template ${filePath} is missing or has malformed required id`,
+      );
+      const id = template.id.trim();
+      assertResourceId(id, `Prompt template ${filePath}`);
+      invariant(
+        template.surface === surface,
+        `Prompt template ${id} has mismatched surface metadata: expected ${surface}`,
+      );
+      invariant(
+        typeof template.title === 'string' && template.title.trim().length > 0,
+        `Prompt template ${id} is missing required English fallback field: title`,
+      );
+      invariant(
+        typeof template.prompt === 'string' && template.prompt.trim().length >= 20,
+        `Prompt template ${id} is missing or has malformed required prompt`,
+      );
+
+      const source = template.source;
+      invariant(
+        Boolean(source) && typeof source === 'object' && !Array.isArray(source),
+        `Prompt template ${id} is missing or has malformed source metadata`,
+      );
+      const sourceRecord = source as Record<string, unknown>;
+      invariant(
+        typeof sourceRecord.repo === 'string' && typeof sourceRecord.license === 'string',
+        `Prompt template ${id} is missing source.repo or source.license`,
+      );
+
+      const summary = typeof template.summary === 'string' ? normalizeText(template.summary) : '';
+      const category =
+        typeof template.category === 'string' ? normalizeText(template.category) || 'General' : 'General';
+      const tags = Array.isArray(template.tags)
+        ? template.tags
+            .filter((tag): tag is string => typeof tag === 'string')
+            .map((tag) => normalizeText(tag))
+            .filter((tag) => tag.length > 0)
+        : [];
+
       resources.push({
-        id: raw.id,
-        title: normalizeText(raw.title),
-        summary: normalizeText(raw.summary),
-        category: normalizeText(raw.category),
-        tags: Array.isArray(raw.tags) ? raw.tags.map((tag) => normalizeText(tag)) : [],
+        id,
+        title: normalizeText(template.title),
+        summary,
+        category,
+        tags,
       });
     }
   }

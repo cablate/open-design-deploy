@@ -39,7 +39,7 @@ created: '2026-05-11'
 
 ### Success Criteria
 
-- Adding a new English-only skill, design system, or prompt template requires no i18n metadata edit.
+- Adding a new English-only skill, design system, or prompt template requires no per-resource fallback ID list edit or per-resource localized copy edit for display fields; category/tag taxonomy localization still follows existing coverage.
 - Concurrent asset PRs do not need to touch fallback arrays.
 - Localized display still shows translated copy when present and English resource fields when absent.
 - Coverage fails when a discovered curated resource lacks required English source fields for fallback display.
