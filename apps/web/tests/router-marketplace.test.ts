@@ -39,7 +39,12 @@ describe('router /marketplace', () => {
 
   it('does not break the home / project routes', () => {
     expect(parseRoute('/')).toEqual({ kind: 'home', view: 'home' });
-    expect(parseRoute('/projects/abc')).toEqual({ kind: 'project', projectId: 'abc', fileName: null });
+    expect(parseRoute('/projects/abc')).toEqual({
+      kind: 'project',
+      projectId: 'abc',
+      conversationId: null,
+      fileName: null,
+    });
   });
 });
 
@@ -62,7 +67,12 @@ describe('router entry sub-views', () => {
   });
 
   it('still parses /projects/<id> as a project detail route', () => {
-    expect(parseRoute('/projects/abc')).toEqual({ kind: 'project', projectId: 'abc', fileName: null });
+    expect(parseRoute('/projects/abc')).toEqual({
+      kind: 'project',
+      projectId: 'abc',
+      conversationId: null,
+      fileName: null,
+    });
   });
 
   it('round-trips entry sub-views through buildPath', () => {

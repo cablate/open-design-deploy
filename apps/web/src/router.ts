@@ -59,10 +59,11 @@ export function parseRoute(pathname: string): Route {
         return {
           kind: 'project',
           projectId,
+          conversationId: null,
           fileName: decodeURIComponent(parts.slice(3).join('/')),
         };
       }
-      return { kind: 'project', projectId, fileName: null };
+      return { kind: 'project', projectId, conversationId: null, fileName: null };
     }
     return { kind: 'home', view: 'projects' };
   }

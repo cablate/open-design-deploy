@@ -52,9 +52,6 @@ const PLUGINS_TABS: ReadonlyArray<{
   { id: 'team', label: 'Team', hint: 'Enterprise' },
 ];
 
-const COMMUNITY_MARKETPLACE_SOURCE_URL =
-  'https://raw.githubusercontent.com/nexu-io/open-design/garnet-hemisphere/plugins/registry/community/open-design-marketplace.json';
-
 const PLUGIN_SHARE_DETAILS: Record<PluginShareAction, {
   eyebrow: string;
   fallbackTitle: string;
@@ -1021,7 +1018,7 @@ function SourcesPanel({
             id="plugin-marketplace-url"
             value={url}
             onChange={(event) => setUrl(event.target.value)}
-            placeholder={COMMUNITY_MARKETPLACE_SOURCE_URL}
+            placeholder="https://example.com/open-design-marketplace.json"
             disabled={pendingAction === 'add'}
           />
           <select

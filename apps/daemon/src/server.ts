@@ -75,6 +75,10 @@ import {
   uninstallPlugin,
 } from './plugins/index.js';
 import {
+  marketplaceManifestUrlForRegistry,
+  marketplaceRegistryIdFromUrl,
+} from './plugins/marketplaces.js';
+import {
   getSurface,
   listSurfacesForProject,
   listSurfacesForRun,
@@ -1036,20 +1040,14 @@ const PLUGIN_REGISTRY_DIR = resolveDaemonResourceDir(
   path.join(PROJECT_ROOT, 'plugins', 'registry'),
 );
 const OFFICIAL_MARKETPLACE_ID = 'official';
-const DEFAULT_MARKETPLACE_SEED_BASE_URL =
-  'https://raw.githubusercontent.com/nexu-io/open-design/garnet-hemisphere/plugins/registry';
-const OFFICIAL_MARKETPLACE_URL = `${DEFAULT_MARKETPLACE_SEED_BASE_URL}/official/open-design-marketplace.json`;
 const OFFICIAL_PLUGIN_SOURCE_REPO = 'github:nexu-io/open-design@main';
-const DEFAULT_MARKETPLACE_SEEDS = new Map([
-  [OFFICIAL_MARKETPLACE_ID, {
-    trust: 'official',
-    url:   OFFICIAL_MARKETPLACE_URL,
-  }],
-  ['community', {
-    trust: 'restricted',
-    url:   `${DEFAULT_MARKETPLACE_SEED_BASE_URL}/community/open-design-marketplace.json`,
-  }],
-]);
+
+function defaultMarketplaceSeedConfig(id) {
+  return {
+    trust: id === OFFICIAL_MARKETPLACE_ID ? 'official' : 'restricted',
+    url:   marketplaceManifestUrlForRegistry(id),
+  };
+}
 
 function bundledPluginRegistrySource(sourcePath) {
   const rel = path.relative(PROJECT_ROOT, sourcePath).split(path.sep).join('/');
@@ -1079,6 +1077,38 @@ function mergeMarketplaceEntries(manifestText, entries) {
   } catch {
     return manifestText;
   }
+}
+
+async function marketplaceSeedManifestText(id, bundledMarketplaceEntries) {
+  const manifestPath = path.join(PLUGIN_REGISTRY_DIR, id, 'open-design-marketplace.json');
+  if (!fs.existsSync(manifestPath)) return null;
+  let manifestText = await fs.promises.readFile(manifestPath, 'utf8');
+  if (id === OFFICIAL_MARKETPLACE_ID && bundledMarketplaceEntries.length > 0) {
+    manifestText = mergeMarketplaceEntries(manifestText, bundledMarketplaceEntries);
+  }
+  return manifestText;
+}
+
+function createMarketplaceFetcher(seedId, bundledMarketplaceEntries) {
+  return async (url) => {
+    const registryId = marketplaceRegistryIdFromUrl(url);
+    if (registryId && (!seedId || registryId === seedId)) {
+      const manifestText = await marketplaceSeedManifestText(registryId, bundledMarketplaceEntries);
+      if (manifestText != null) {
+        return {
+          ok:     true,
+          status: 200,
+          text:   async () => manifestText,
+        };
+      }
+    }
+    const response = await fetch(url, { redirect: 'follow' });
+    return {
+      ok:     response.ok,
+      status: response.status,
+      text:   () => response.text(),
+    };
+  };
 }
 
 export function resolveDataDir(raw, projectRoot) {
@@ -2741,16 +2771,9 @@ export async function startServer({
     for (const dirent of seedDirs) {
       if (!dirent.isDirectory()) continue;
       const id = dirent.name;
-      const manifestPath = path.join(PLUGIN_REGISTRY_DIR, id, 'open-design-marketplace.json');
-      if (!fs.existsSync(manifestPath)) continue;
-      let manifestText = await fs.promises.readFile(manifestPath, 'utf8');
-      if (id === OFFICIAL_MARKETPLACE_ID && bundledMarketplaceEntries.length > 0) {
-        manifestText = mergeMarketplaceEntries(manifestText, bundledMarketplaceEntries);
-      }
-      const configured = DEFAULT_MARKETPLACE_SEEDS.get(id) ?? {
-        trust: 'restricted',
-        url:   `${DEFAULT_MARKETPLACE_SEED_BASE_URL}/${id}/open-design-marketplace.json`,
-      };
+      const manifestText = await marketplaceSeedManifestText(id, bundledMarketplaceEntries);
+      if (!manifestText) continue;
+      const configured = defaultMarketplaceSeedConfig(id);
       const result = ensureMarketplaceManifest(db, {
         id,
         url: configured.url,
@@ -5311,7 +5334,14 @@ export async function startServer({
       if (!url) return res.status(400).json({ error: 'url is required' });
       const trust = body.trust === 'trusted' || body.trust === 'official' ? body.trust : 'restricted';
       const { addMarketplace } = await import('./plugins/marketplaces.js');
-      const result = await addMarketplace(db, { url, trust });
+      const result = await addMarketplace(db, {
+        url,
+        trust,
+        fetcher: createMarketplaceFetcher(
+          marketplaceRegistryIdFromUrl(url),
+          bundledMarketplaceEntries,
+        ),
+      });
       if (!result.ok) {
         return res.status(result.status).json({
           error: { code: 'marketplace-add-failed', message: result.message, data: { errors: result.errors ?? [] } },
@@ -5347,8 +5377,14 @@ export async function startServer({
 
   app.post('/api/marketplaces/:id/refresh', async (req, res) => {
     try {
-      const { refreshMarketplace } = await import('./plugins/marketplaces.js');
-      const result = await refreshMarketplace(db, req.params.id);
+      const { getMarketplace, refreshMarketplace } = await import('./plugins/marketplaces.js');
+      const row = getMarketplace(db, req.params.id);
+      const seedId = row ? marketplaceRegistryIdFromUrl(row.url) ?? req.params.id : req.params.id;
+      const result = await refreshMarketplace(
+        db,
+        req.params.id,
+        createMarketplaceFetcher(seedId, bundledMarketplaceEntries),
+      );
       if (!result.ok) {
         return res.status(result.status).json({
           error: { code: 'marketplace-refresh-failed', message: result.message, data: { errors: result.errors ?? [] } },

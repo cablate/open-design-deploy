@@ -2477,6 +2477,7 @@ export function ProjectView({
   // captures the prompt independently so downstream effects can still
   // dispatch the auto-send without going through initialDraft.
   const autoSendSeedRef = useRef<string | null>(null);
+  const autoSendFirstMessageRef = useRef(false);
   if (autoSendSeedRef.current === null) {
     let isAutoSend = false;
     try {
@@ -2486,6 +2487,7 @@ export function ProjectView({
     } catch {
       /* sessionStorage may be unavailable; treat as manual flow. */
     }
+    autoSendFirstMessageRef.current = isAutoSend;
     autoSendSeedRef.current = isAutoSend ? (project.pendingPrompt ?? '') : '';
   }
   const [initialDraft, setInitialDraft] = useState<
@@ -2498,6 +2500,10 @@ export function ProjectView({
   useEffect(() => {
     const pendingPrompt = project.pendingPrompt;
     if (!pendingPrompt) return;
+    if (autoSendFirstMessageRef.current) {
+      onClearPendingPrompt();
+      return;
+    }
     setInitialDraft((current) =>
       current?.projectId === project.id
         ? current

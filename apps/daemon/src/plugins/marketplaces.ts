@@ -73,38 +73,99 @@ export interface EnsureMarketplaceManifestInput {
 }
 
 const HTTPS_RE = /^https:\/\//i;
-const RAW_REGISTRY_BASE_URL =
-  'https://raw.githubusercontent.com/nexu-io/open-design/garnet-hemisphere/plugins/registry';
+const DEFAULT_MARKETPLACE_REPO = 'nexu-io/open-design';
+const DEFAULT_MARKETPLACE_REPO_REF = 'main';
+const DEFAULT_MARKETPLACE_REGISTRY_PATH = 'plugins/registry';
 const PUBLIC_MARKETPLACE_BASE_URL = 'https://open-design.ai/marketplace';
+const PUBLIC_PLUGINS_BASE_URL = 'https://open-design.ai/plugins';
+
+function marketplaceRegistryRepo(): string {
+  return (process.env.OD_MARKETPLACE_REPO?.trim() || DEFAULT_MARKETPLACE_REPO)
+    .replace(/^\/+|\/+$/g, '');
+}
+
+export function marketplaceRegistryBaseUrl(): string {
+  const explicit = process.env.OD_MARKETPLACE_REGISTRY_BASE_URL?.trim();
+  if (explicit) return explicit.replace(/\/+$/, '');
+
+  const repo = marketplaceRegistryRepo();
+  const ref = (process.env.OD_MARKETPLACE_REPO_REF?.trim() || DEFAULT_MARKETPLACE_REPO_REF)
+    .replace(/^\/+|\/+$/g, '');
+  const registryPath = (process.env.OD_MARKETPLACE_REGISTRY_PATH?.trim() || DEFAULT_MARKETPLACE_REGISTRY_PATH)
+    .replace(/^\/+|\/+$/g, '');
+  return `https://raw.githubusercontent.com/${repo}/${ref}/${registryPath}`;
+}
+
+export function marketplaceManifestUrlForRegistry(id: string): string {
+  const registryId = id.trim().replace(/^\/+|\/+$/g, '');
+  return `${marketplaceRegistryBaseUrl()}/${registryId}/open-design-marketplace.json`;
+}
+
+function registryIdFromBaseUrl(url: string, baseUrl: string): string | null {
+  const base = baseUrl.replace(/\/+$/, '');
+  if (!url.startsWith(`${base}/`) || !url.endsWith('/open-design-marketplace.json')) {
+    return null;
+  }
+  const id = url
+    .slice(base.length + 1)
+    .replace(/\/open-design-marketplace\.json$/, '');
+  return id && !id.includes('/') ? id : null;
+}
+
+export function marketplaceRegistryIdFromUrl(url: string): string | null {
+  const trimmed = url.trim();
+  if (!trimmed) return null;
+
+  const configuredId = registryIdFromBaseUrl(trimmed, marketplaceRegistryBaseUrl());
+  if (configuredId) return configuredId;
+
+  const publicBases = [PUBLIC_MARKETPLACE_BASE_URL, PUBLIC_PLUGINS_BASE_URL];
+  for (const base of publicBases) {
+    if (trimmed === `${base}/open-design-marketplace.json`) return 'official';
+    if (trimmed.startsWith(`${base}/`) && trimmed.endsWith('/open-design-marketplace.json')) {
+      const id = trimmed
+        .slice(base.length + 1)
+        .replace(/\/open-design-marketplace\.json$/, '');
+      if (id && !id.includes('/')) return id;
+    }
+  }
+
+  try {
+    const parsed = new URL(trimmed);
+    if (parsed.protocol !== 'https:' || parsed.hostname !== 'raw.githubusercontent.com') {
+      return null;
+    }
+    const parts = parsed.pathname.split('/').filter(Boolean);
+    if (parts.length < 6) return null;
+    const [owner, repo] = parts;
+    const allowedRepos = new Set([DEFAULT_MARKETPLACE_REPO, marketplaceRegistryRepo()]);
+    if (!allowedRepos.has(`${owner}/${repo}`)) return null;
+    const marker = parts.findIndex((part, index) =>
+      part === 'plugins' && parts[index + 1] === 'registry',
+    );
+    const id = marker >= 0 ? parts[marker + 2] : undefined;
+    const filename = marker >= 0 ? parts[marker + 3] : undefined;
+    return id && filename === 'open-design-marketplace.json' ? id : null;
+  } catch {
+    return null;
+  }
+}
+
+export function resolveMarketplaceFetchUrl(url: string): string {
+  const trimmed = url.trim();
+  const registryId = marketplaceRegistryIdFromUrl(trimmed);
+  return registryId ? marketplaceManifestUrlForRegistry(registryId) : trimmed;
+}
 
 function normalizeMarketplaceTrust(value: unknown): MarketplaceTrustTier {
   return value === 'official' || value === 'trusted' ? value : 'restricted';
-}
-
-function normalizeMarketplaceUrl(url: string): string {
-  const trimmed = url.trim();
-  if (trimmed === `${PUBLIC_MARKETPLACE_BASE_URL}/open-design-marketplace.json`) {
-    return `${RAW_REGISTRY_BASE_URL}/official/open-design-marketplace.json`;
-  }
-  if (
-    trimmed.startsWith(`${PUBLIC_MARKETPLACE_BASE_URL}/`) &&
-    trimmed.endsWith('/open-design-marketplace.json')
-  ) {
-    const id = trimmed
-      .slice(PUBLIC_MARKETPLACE_BASE_URL.length + 1)
-      .replace(/\/open-design-marketplace\.json$/, '');
-    if (id && !id.includes('/')) {
-      return `${RAW_REGISTRY_BASE_URL}/${id}/open-design-marketplace.json`;
-    }
-  }
-  return trimmed;
 }
 
 export async function addMarketplace(
   db: SqliteDb,
   input: AddMarketplaceInput,
 ): Promise<AddMarketplaceResult | AddMarketplaceFailure> {
-  const url = normalizeMarketplaceUrl(input.url);
+  const url = resolveMarketplaceFetchUrl(input.url);
   if (!HTTPS_RE.test(url)) {
     return {
       ok: false,
@@ -302,7 +363,7 @@ export async function refreshMarketplace(
     return { ok: false, status: 404, message: `marketplace ${id} not found` };
   }
   const useFetcher = fetcher ?? defaultFetcher;
-  const url = normalizeMarketplaceUrl(existing.url);
+  const url = resolveMarketplaceFetchUrl(existing.url);
   let resp;
   try {
     resp = await useFetcher(url);

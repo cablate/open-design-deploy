@@ -102,6 +102,17 @@ vi.mock('../../src/components/Loading', () => ({
   CenteredLoader: () => null,
 }));
 
+async function waitForReadyChatPaneProps() {
+  await waitFor(() => {
+    expect(chatPaneSpy).toHaveBeenCalled();
+    expect(chatPaneSpy.mock.calls.at(-1)?.[0]?.sendDisabled).toBe(false);
+  });
+  return chatPaneSpy.mock.calls.at(-1)?.[0] as {
+    onSend?: (prompt: string, attachments: unknown[], comments: unknown[]) => Promise<void>;
+    initialDraft?: string;
+  };
+}
+
 describe('ProjectView daemon cleanup', () => {
   afterEach(() => {
     cleanup();
@@ -308,8 +319,7 @@ describe('ProjectView daemon cleanup', () => {
         />,
       );
 
-      await waitFor(() => expect(chatPaneSpy).toHaveBeenCalled());
-      const lastProps = chatPaneSpy.mock.calls.at(-1)?.[0];
+      const lastProps = await waitForReadyChatPaneProps();
       expect(lastProps?.initialDraft).toBeUndefined();
     } finally {
       window.sessionStorage.removeItem('od:auto-send-first:project-2');
@@ -427,8 +437,7 @@ describe('ProjectView daemon cleanup', () => {
       />,
     );
 
-    await waitFor(() => expect(chatPaneSpy).toHaveBeenCalled());
-    const sendProps = chatPaneSpy.mock.calls.at(-1)?.[0] as { onSend?: (prompt: string, attachments: unknown[], comments: unknown[]) => Promise<void> } | undefined;
+    const sendProps = await waitForReadyChatPaneProps();
     expect(sendProps?.onSend).toBeTypeOf('function');
 
     await sendProps!.onSend!('hello world', [], []);
@@ -514,8 +523,7 @@ describe('ProjectView daemon cleanup', () => {
       />,
     );
 
-    await waitFor(() => expect(chatPaneSpy).toHaveBeenCalled());
-    const sendProps = chatPaneSpy.mock.calls.at(-1)?.[0] as { onSend?: (prompt: string, attachments: unknown[], comments: unknown[]) => Promise<void> } | undefined;
+    const sendProps = await waitForReadyChatPaneProps();
     await sendProps!.onSend!('quick send', [], []);
     await waitFor(() => expect(streamViaDaemon).toHaveBeenCalledTimes(1));
 

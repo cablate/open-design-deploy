@@ -45,6 +45,9 @@ vi.mock('../../src/components/EntryView', () => ({
       <button type="button" onClick={() => onOpenSettings('composio')}>
         Open connectors settings
       </button>
+      <button type="button" onClick={() => onOpenSettings()}>
+        Open execution settings
+      </button>
       <div>Composio tail: {config.composio?.apiKeyTail ?? 'none'}</div>
       <button
         type="button"
@@ -282,7 +285,7 @@ describe('App connectors settings flows', () => {
       expect(container.querySelector('.privacy-consent-banner')).toBeTruthy();
     });
 
-    fireEvent.click(screen.getByRole('button', { name: 'Open connectors settings' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Open execution settings' }));
 
     await waitFor(() => {
       expect(screen.getByRole('dialog', { name: 'Settings dialog' })).toBeTruthy();

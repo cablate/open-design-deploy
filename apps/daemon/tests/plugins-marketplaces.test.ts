@@ -16,9 +16,11 @@ import {
   ensureMarketplaceManifest,
   getMarketplace,
   listMarketplaces,
+  marketplaceManifestUrlForRegistry,
   refreshMarketplace,
   removeMarketplace,
   resolvePluginInMarketplaces,
+  resolveMarketplaceFetchUrl,
   setMarketplaceTrust,
 } from '../src/plugins/marketplaces.js';
 
@@ -136,6 +138,32 @@ describe('marketplaces', () => {
     }
   });
 
+  it('normalizes public marketplace urls to the canonical raw registry', async () => {
+    const seenUrls: string[] = [];
+    const result = await addMarketplace(db, {
+      url: 'https://open-design.ai/marketplace/community/open-design-marketplace.json',
+      fetcher: async (url) => {
+        seenUrls.push(url);
+        return {
+          ok: true,
+          status: 200,
+          text: async () => VALID_MANIFEST,
+        };
+      },
+    });
+
+    if (!result.ok) throw new Error('add failed');
+    const expectedUrl = marketplaceManifestUrlForRegistry('community');
+    expect(seenUrls).toEqual([expectedUrl]);
+    expect(result.row.url).toBe(expectedUrl);
+  });
+
+  it('normalizes legacy branch raw urls to the canonical raw registry', () => {
+    expect(resolveMarketplaceFetchUrl(
+      'https://raw.githubusercontent.com/nexu-io/open-design/garnet-hemisphere/plugins/registry/community/open-design-marketplace.json',
+    )).toBe(marketplaceManifestUrlForRegistry('community'));
+  });
+
   it('requires a raw open-design-marketplace.json document, not a GitHub tree page', async () => {
     const result = await addMarketplace(db, {
       url: 'https://github.com/nexu-io/open-design/tree/garnet-hemisphere/plugins/registry/community',
@@ -171,6 +199,38 @@ describe('marketplaces', () => {
     expect(refreshed.row.version).toBe('1.0.1');
     expect(refreshed.row.manifest.plugins).toHaveLength(2);
     expect(refreshed.row.refreshedAt).toBeGreaterThanOrEqual(added.row.refreshedAt);
+  });
+
+  it('refresh normalizes legacy public urls before fetching', async () => {
+    const seeded = ensureMarketplaceManifest(db, {
+      id: 'community',
+      url: 'https://open-design.ai/marketplace/community/open-design-marketplace.json',
+      trust: 'restricted',
+      manifestText: VALID_MANIFEST,
+    });
+    if (!seeded.ok) throw new Error('seed failed');
+    const updatedManifest = JSON.parse(VALID_MANIFEST);
+    updatedManifest.version = '1.0.1';
+    const seenUrls: string[] = [];
+
+    const refreshed = await refreshMarketplace(
+      db,
+      'community',
+      async (url) => {
+        seenUrls.push(url);
+        return {
+          ok: true,
+          status: 200,
+          text: async () => JSON.stringify(updatedManifest),
+        };
+      },
+    );
+
+    if (!refreshed.ok) throw new Error('refresh failed');
+    const expectedUrl = marketplaceManifestUrlForRegistry('community');
+    expect(seenUrls).toEqual([expectedUrl]);
+    expect(refreshed.row.url).toBe(expectedUrl);
+    expect(getMarketplace(db, 'community')?.url).toBe(expectedUrl);
   });
 
   it('setMarketplaceTrust updates the trust tier and remove deletes the row', async () => {
