@@ -25,6 +25,9 @@ async function createWorkspaceFixture(workspaceRoot: string): Promise<void> {
   await mkdir(join(workspaceRoot, "prompt-templates", "image"), {
     recursive: true,
   });
+  await mkdir(join(workspaceRoot, "plugins", "registry", "official"), {
+    recursive: true,
+  });
 }
 
 describe("prepareResourceTree", () => {
