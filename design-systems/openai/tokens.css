@@ -84,15 +84,20 @@
   --tracking-display: -0.02em;
 
   /* ─── Spacing ──────────────────────────────────────────────────── */
-  /* 4px base grid. Section rhythm: 96–128px desktop per DESIGN.md. */
+  /* 4px base grid; schema spine: --space-N = N×4 px.
+     OpenAI's DESIGN.md §5 scale (4 8 12 16 24 32 48 64 96 128) maps
+     naturally onto the spine — 64px lives in --space-16 (brand ext). */
   --space-1:  4px;
   --space-2:  8px;
   --space-3:  12px;
   --space-4:  16px;
-  --space-5:  24px;
-  --space-6:  32px;
-  --space-8:  48px;
-  --space-12: 64px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-12: 48px;
+
+  /* Brand extension — 64px gap used between major page sections. */
+  --space-16: 64px;
 
   /* Section rhythm — generous whitespace is the primary divider. */
   --section-y-desktop: 96px;

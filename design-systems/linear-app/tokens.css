@@ -111,7 +111,11 @@
     0 0 0 1px rgba(255, 255, 255, 0.05);
 
   /* ─── Focus ────────────────────────────────────────────────────── */
-  --focus-ring: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* Multi-layer stack per DESIGN.md §6 + §7: accent ring makes the
+     indicator visible on the near-black #08090a canvas. */
+  --focus-ring:
+    0 0 0 2px color-mix(in oklab, var(--accent), transparent 30%),
+    0 4px 12px rgba(0, 0, 0, 0.1);
 
   /* ─── Motion ───────────────────────────────────────────────────── */
   --motion-fast:   150ms;
