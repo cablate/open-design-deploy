@@ -812,7 +812,24 @@ describe('DesignSystemCreationFlow', () => {
     expect(mocks.patchProject).toHaveBeenCalledWith(
       project.id,
       expect.objectContaining({
-        pendingPrompt: expect.stringContaining('The intake command uses GitHub connector tools for repository metadata, README, full tree, and raw file contents.'),
+        pendingPrompt: expect.stringContaining('Do not call GitHub connector tree/content/raw tools directly from the agent.'),
+      }),
+    );
+    expect(mocks.patchProject).toHaveBeenCalledWith(
+      project.id,
+      expect.objectContaining({
+        pendingPrompt: expect.stringContaining('Large repositories can trigger `CONNECTOR_OUTPUT_TOO_LARGE`; the bounded intake command is the only allowed GitHub repository intake path for this workflow.'),
+      }),
+    );
+    expect(mocks.writeProjectTextFile).toHaveBeenCalledWith(
+      project.id,
+      'context/source-context.md',
+      expect.stringContaining('GitHub evidence must come from the bounded `github-design-context` command'),
+    );
+    expect(mocks.patchProject).toHaveBeenCalledWith(
+      project.id,
+      expect.objectContaining({
+        pendingPrompt: expect.stringContaining('If you already hit `CONNECTOR_OUTPUT_TOO_LARGE` from a direct connector call, do not stop and do not retry the same direct tool.'),
       }),
     );
     expect(mocks.patchProject).toHaveBeenCalledWith(

@@ -2581,6 +2581,7 @@ function buildCreationAgentPrompt(
     '',
     'Completion gate:',
     '- For each linked GitHub repository, there must be a `context/github/*.md` evidence note plus connector-written snapshots under `context/github/*/files/` before writing final design-system rules or previews.',
+    '- Do not call GitHub connector tree/content/raw tools directly from the agent. Use only the bounded `github-design-context` command listed in `context/source-context.md`; it handles large repositories by narrowing and snapshotting evidence locally.',
     '- If connector intake fails, stop with the permission or connection issue. Do not substitute public GitHub fallback, web browsing, memory, or URL-only inference.',
     '- Finish only after the project contains reviewable design-system artifacts: `DESIGN.md`, reusable token/style files, preview HTML, UI-kit examples, and any supported assets.',
     '',
@@ -2716,6 +2717,7 @@ function buildSourceContextManifest(
     '- preview/ should contain small reviewable HTML cards for typography, color, spacing, brand, or component evidence.',
     '- ui_kits/ should contain interface examples that demonstrate how the system is applied.',
     '- assets/ and context/ should preserve logos, brand files, provenance, and source notes for future projects.',
+    '- GitHub evidence must come from the bounded `github-design-context` command, not direct connector tree/content/raw tool calls.',
     '- Draft design systems cannot be used by other projects until published.',
   );
 
@@ -2732,10 +2734,12 @@ function buildGithubConnectorRunbook(githubUrls: string[]): string {
     '1. Run `"$OD_NODE_BIN" "$OD_BIN" tools connectors list --format compact` and find the connected `github` connector. Do not continue from URL text alone.',
     '2. For each linked repository, run the local intake command before writing design-system files:',
     intakeCommands,
-    '3. The intake command uses GitHub connector tools for repository metadata, README, full tree, and raw file contents. It writes a reviewable evidence note and file snapshots under `context/github/`; keep those files as the source evidence for this design-system project.',
-    '4. The command is strict: if the connected GitHub tool surface cannot read repository files, stop and explain the connector permission problem. Do not fall back to public GitHub, web browsing, memory, or URL-only inference for design-system files.',
-    '5. Inspect the generated evidence note plus snapshots for README, package manifests, Tailwind/theme/token files, global CSS, component source for buttons/forms/navigation/cards/tables, layout shells, icons/logos/assets, and representative app entry files.',
-    '6. Use that evidence to create or update `DESIGN.md`, `colors_and_type.css`, `README.md`, `SKILL.md`, `preview/`, `ui_kits/`, and `assets/` so the Design System tab can review the output.',
+    '3. Do not call GitHub connector tree/content/raw tools directly from the agent. Large repositories can trigger `CONNECTOR_OUTPUT_TOO_LARGE`; the bounded intake command is the only allowed GitHub repository intake path for this workflow.',
+    '4. The intake command narrows large repositories through bounded directory browsing, selects design-system-relevant files, and writes a reviewable evidence note plus file snapshots under `context/github/`; keep those files as the source evidence for this design-system project.',
+    '5. If you already hit `CONNECTOR_OUTPUT_TOO_LARGE` from a direct connector call, do not stop and do not retry the same direct tool. Run the bounded intake command above, then inspect the written snapshots.',
+    '6. The command is strict: if the bounded intake command cannot read repository files, stop and explain the connector permission problem. Do not fall back to public GitHub, web browsing, memory, or URL-only inference for design-system files.',
+    '7. Inspect the generated evidence note plus snapshots for README, package manifests, Tailwind/theme/token files, global CSS, component source for buttons/forms/navigation/cards/tables, layout shells, icons/logos/assets, and representative app entry files.',
+    '8. Use that evidence to create or update `DESIGN.md`, `colors_and_type.css`, `README.md`, `SKILL.md`, `preview/`, `ui_kits/`, and `assets/` so the Design System tab can review the output.',
   ].join('\n');
 }
 
