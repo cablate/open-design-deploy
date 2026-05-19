@@ -113,6 +113,68 @@ describe('startCallbackListener', () => {
     });
   });
 
+  it('keeps the listener open on ?error= replays with a mismatched state', async () => {
+    // Browser history replay of an OLD `/callback?error=…&state=stale`
+    // must not close the listener — the current dance still has a real
+    // xAI redirect coming, and the singleton :56121 socket can't be
+    // re-bound by a follow-up Sign in until the listener releases.
+    let onCallbackCount = 0;
+    const outcomeRef: { current: CallbackOutcome | null } = { current: null };
+    listener = await startCallbackListener({
+      expectedState: 'state-current',
+      onCallback: async (o) => {
+        onCallbackCount += 1;
+        outcomeRef.current = o;
+      },
+      port: TEST_PORT,
+    });
+
+    // 1. Stale tab replays an error from a previous dance (different state).
+    const stale = await fetchCallback(listener.address, {
+      error: 'access_denied',
+      state: 'state-old',
+    });
+    expect(stale.status).toBe(400);
+    await new Promise((r) => setTimeout(r, 30));
+    expect(onCallbackCount).toBe(0);
+    expect(outcomeRef.current).toBeNull();
+
+    // 2. Real callback completes normally.
+    const real = await fetchCallback(listener.address, {
+      code: 'fresh-code',
+      state: 'state-current',
+    });
+    expect(real.status).toBe(200);
+    await new Promise((r) => setTimeout(r, 30));
+    expect(onCallbackCount).toBe(1);
+    expect(outcomeRef.current?.kind).toBe('ok');
+  });
+
+  it('consumes ?error= with the expected state (real provider rejection)', async () => {
+    // When xAI itself rejects the current dance, the error redirect
+    // carries our state; we should propagate immediately rather than
+    // wait the full 30 min timeout.
+    const outcomeRef: { current: CallbackOutcome | null } = { current: null };
+    listener = await startCallbackListener({
+      expectedState: 'state-real',
+      onCallback: async (o) => {
+        outcomeRef.current = o;
+      },
+      port: TEST_PORT,
+    });
+    const res = await fetchCallback(listener.address, {
+      error: 'access_denied',
+      state: 'state-real',
+    });
+    expect(res.status).toBe(400);
+    await new Promise((r) => setTimeout(r, 30));
+    expect(outcomeRef.current?.kind).toBe('error');
+    if (outcomeRef.current?.kind === 'error') {
+      expect(outcomeRef.current.error).toBe('access_denied');
+    }
+    listener = null; // already closed itself
+  });
+
   it('keeps the listener open on missing-code/missing-state requests too', async () => {
     let onCallbackCount = 0;
     const outcomeRef: { current: CallbackOutcome | null } = { current: null };

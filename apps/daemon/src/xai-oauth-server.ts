@@ -136,20 +136,23 @@ export async function startCallbackListener(
     }
 
     // Decide whether this hit *consumes* the listener. A stray browser
-    // tab replaying an old `/callback?state=…` would otherwise close the
-    // listener with a state-mismatch error before the real xAI redirect
-    // can arrive — we share a fixed singleton port, so killing it on a
-    // stale request strands the in-flight authorization. Keep the
-    // listener open on stale/malformed requests; the real callback will
-    // still find it. Consume on:
+    // tab replaying an old `/callback?state=…` (or `?error=…&state=…`)
+    // would otherwise close the singleton :56121 listener before the
+    // real xAI redirect can arrive — we share a fixed port, so killing
+    // it on a stale request strands the in-flight authorization. Keep
+    // the listener open on stale/malformed requests; the real callback
+    // will still find it. Consume on:
     //   - ok callback (matched state, code present)
-    //   - explicit ?error= from xAI (the auth provider terminated the
-    //     dance; we should propagate, not wait until the 30 min
-    //     timeout). xAI may or may not echo state with the error;
-    //     a stale tab can't fabricate `?error=` without colluding
-    //     with the auth server, so this branch is safe to consume on.
-    const consumesListener =
-      outcome.kind === 'ok' || Boolean(errorParam);
+    //   - explicit ?error= without a state (xAI rejected before issuing
+    //     state, so there's nothing to match against — safe to consume)
+    //   - explicit ?error= with state matching our expectedState (xAI
+    //     told the user the dance failed; propagate now instead of
+    //     waiting for the 30 min timeout)
+    // An ?error= with a *mismatched* state is treated like the stale
+    // success replay above: 400 the browser, leave the listener live.
+    const errorConsumes =
+      Boolean(errorParam) && (!state || state === input.expectedState);
+    const consumesListener = outcome.kind === 'ok' || errorConsumes;
     if (consumesListener) {
       consumed = true;
     }
