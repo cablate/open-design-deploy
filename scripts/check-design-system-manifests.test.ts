@@ -95,3 +95,93 @@ test("design-system project manifest schema rejects path drift and unknown keys"
     assert.match(errors, /\$\.extra/);
   }
 });
+
+test("design-system project manifest schema accepts import-project optional indexes", () => {
+  const result = validateDesignSystemProjectManifest({
+    schemaVersion: DESIGN_SYSTEM_PROJECT_SCHEMA_VERSION,
+    id: "cherry-studio",
+    name: "Cherry Studio",
+    category: "AI & LLM",
+    source: {
+      type: "github",
+      url: "https://github.com/cherryhq/cherry-studio",
+      branch: "main",
+      commit: "abc123",
+      importedAt: "2026-05-19T00:00:00.000Z",
+    },
+    files: {
+      design: "DESIGN.md",
+      tokens: "tokens.css",
+      components: "components.html",
+    },
+    assetsDir: "assets",
+    previewDir: "preview",
+    usage: "USAGE.md",
+    componentsManifest: "components.manifest.json",
+    importMode: "hybrid",
+    craft: {
+      applies: ["color"],
+      suggested: ["accessibility"],
+      exemptions: [],
+    },
+    fonts: [
+      { family: "Ubuntu", weight: 400, file: "fonts/ubuntu/Ubuntu-Regular.ttf" },
+      { family: "Ubuntu", weight: 500, style: "normal", file: "fonts/ubuntu/Ubuntu-Medium.ttf" },
+    ],
+    preview: {
+      dir: "preview",
+      pages: [
+        { path: "preview/colors.html", role: "colors", title: "Colors" },
+        { path: "preview/app.html", role: "app" },
+      ],
+    },
+    sourceFiles: {
+      scanned: "source/scanned-files.json",
+      evidence: "source/evidence.md",
+      tokens: "source/tokens.source.json",
+      snippets: "source/snippets/INDEX.json",
+    },
+  });
+
+  assert.equal(result.ok, true);
+  if (result.ok) {
+    assert.equal(result.manifest.usage, "USAGE.md");
+    assert.equal(result.manifest.componentsManifest, "components.manifest.json");
+    assert.equal(result.manifest.importMode, "hybrid");
+    assert.equal(result.manifest.preview?.pages.length, 2);
+  }
+});
+
+test("design-system project manifest schema rejects unsafe import-project paths", () => {
+  const result = validateDesignSystemProjectManifest({
+    schemaVersion: DESIGN_SYSTEM_PROJECT_SCHEMA_VERSION,
+    id: "cherry-studio",
+    name: "Cherry Studio",
+    category: "AI & LLM",
+    source: { type: "local", path: "/tmp/cherry-studio" },
+    files: {
+      design: "DESIGN.md",
+      tokens: "tokens.css",
+    },
+    usage: "../USAGE.md",
+    componentsManifest: "/tmp/components.manifest.json",
+    fonts: [{ family: "Ubuntu", file: "fonts\\Ubuntu-Regular.ttf" }],
+    preview: {
+      dir: "preview",
+      pages: [{ path: "preview//colors.html" }],
+    },
+    sourceFiles: {
+      scanned: "source/../scanned-files.json",
+    },
+  });
+
+  assert.equal(result.ok, false);
+  if (!result.ok) {
+    const errors = result.errors.join("\n");
+    assert.match(errors, /\$\.usage/);
+    assert.match(errors, /\$\.componentsManifest/);
+    assert.match(errors, /\$\.fonts\[0\]\.file/);
+    assert.match(errors, /\$\.preview\.pages\[0\]\.path/);
+    assert.match(errors, /\$\.sourceFiles\.scanned/);
+  }
+});
