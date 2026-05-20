@@ -1,4 +1,3 @@
-import { spawn } from "node:child_process";
 import { mkdir, open, type FileHandle } from "node:fs/promises";
 import path from "node:path";
 
@@ -11,7 +10,6 @@ import {
 import { createSidecarLaunchEnv } from "@open-design/sidecar";
 import {
   collectProcessTreePids,
-  createPackageManagerInvocation,
   createProcessStampArgs,
   listProcessSnapshots,
   matchesStampedProcess,
@@ -58,34 +56,6 @@ async function openAppLog(config: ToolDevConfig, appName: ToolDevAppName): Promi
   const logPath = appConfig(config, appName).latestLogPath;
   await mkdir(path.dirname(logPath), { recursive: true });
   return await open(logPath, "a");
-}
-
-async function runLoggedCommand(request: {
-  args: string[];
-  command: string;
-  cwd: string;
-  env?: NodeJS.ProcessEnv;
-  logFd: number;
-  windowsVerbatimArguments?: boolean;
-}): Promise<void> {
-  const child = spawn(request.command, request.args, {
-    cwd: request.cwd,
-    env: request.env,
-    stdio: ["ignore", request.logFd, request.logFd],
-    windowsHide: process.platform === "win32",
-    windowsVerbatimArguments: request.windowsVerbatimArguments,
-  });
-
-  await new Promise<void>((resolveRun, rejectRun) => {
-    child.once("error", rejectRun);
-    child.once("exit", (code, signal) => {
-      if (code === 0) {
-        resolveRun();
-        return;
-      }
-      rejectRun(new Error(`command failed: ${request.command} ${request.args.join(" ")} (${signal ?? code})`));
-    });
-  });
 }
 
 function createAppStamp(config: ToolDevConfig, appName: ToolDevAppName) {
@@ -144,7 +114,7 @@ export async function assertNoStaleProcess(config: ToolDevConfig, appName: ToolD
 }
 
 async function spawnSidecarRuntime(request: {
-  appName: typeof APP_KEYS.DAEMON | typeof APP_KEYS.WEB;
+  appName: typeof APP_KEYS.DAEMON | typeof APP_KEYS.DESKTOP | typeof APP_KEYS.WEB;
   config: ToolDevConfig;
   entryKind?: BundleEntryKind;
   entryPath?: string;
@@ -244,45 +214,19 @@ export async function spawnWebRuntime(config: ToolDevConfig, options: CliOptions
   }
 }
 
-async function buildDesktop(config: ToolDevConfig, logHandle: FileHandle): Promise<void> {
-  await logHandle.write(`\n[tools-dev] building @open-design/desktop at ${new Date().toISOString()}\n`);
-  const invocation = createPackageManagerInvocation(["--filter", "@open-design/desktop", "build"], process.env);
-  await runLoggedCommand({
-    args: invocation.args,
-    command: invocation.command,
-    cwd: config.workspaceRoot,
-    env: process.env,
-    logFd: logHandle.fd,
-    windowsVerbatimArguments: invocation.windowsVerbatimArguments,
-  });
-}
-
 export async function spawnDesktopRuntime(config: ToolDevConfig, options: CliOptions): Promise<{ pid: number }> {
-  const { args: stampArgs, env } = createAppStamp(config, APP_KEYS.DESKTOP);
   const logHandle = await openAppLog(config, APP_KEYS.DESKTOP);
 
   try {
-    await buildDesktop(config, logHandle);
-    await logHandle.write(`[tools-dev] launching desktop at ${new Date().toISOString()}\n`);
-    const spawnEnv: NodeJS.ProcessEnv = {
-      ...process.env,
-      ...env,
-      ...(options.parentPid == null ? {} : { [PARENT_PID_ENV]: String(options.parentPid) }),
-    };
-    for (const key of Object.keys(spawnEnv)) {
-      if (key.toUpperCase() === "ELECTRON_RUN_AS_NODE") {
-        delete spawnEnv[key];
-      }
-    }
-    const spawned = await spawnBackgroundProcess({
-      args: [config.apps.desktop.mainEntryPath, ...stampArgs],
-      command: config.apps.desktop.electronBinaryPath,
-      cwd: config.workspaceRoot,
-      detached: true,
-      env: spawnEnv,
-      logFd: logHandle.fd,
+    await logHandle.write(`\n[tools-dev] launching desktop at ${new Date().toISOString()}\n`);
+    return await spawnSidecarRuntime({
+      appName: APP_KEYS.DESKTOP,
+      config,
+      env: {
+        ...(options.parentPid == null ? {} : { [PARENT_PID_ENV]: String(options.parentPid) }),
+      },
+      logHandle,
     });
-    return { pid: spawned.pid };
   } finally {
     await logHandle.close();
   }

@@ -24,12 +24,10 @@ async function makeTempConfig(): Promise<ToolDevConfig> {
       },
       desktop: {
         app: "desktop",
-        electronBinaryPath: "electron",
         ipcPath: path.join(root, "desktop.sock"),
         latestLogPath: path.join(root, "logs", "desktop", "latest.log"),
         logDir: path.join(root, "logs", "desktop"),
-        mainEntryPath: path.join(root, "desktop.js"),
-        packageJsonPath: path.join(root, "package.json"),
+        sidecarEntryPath: path.join(root, "desktop-dev-launcher.ts"),
       },
       web: {
         app: "web",

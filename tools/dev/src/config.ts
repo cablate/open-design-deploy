@@ -52,9 +52,7 @@ export type ToolDevConfig = {
       sidecarEntryPath: string;
     };
     desktop: ToolDevAppConfig & {
-      electronBinaryPath: string;
-      mainEntryPath: string;
-      packageJsonPath: string;
+      sidecarEntryPath: string;
     };
     web: ToolDevAppConfig & {
       nextDistDir: string;
@@ -74,14 +72,6 @@ export type ToolDevConfig = {
 function resolveTsxCliPath(): string {
   const require = createRequire(import.meta.url);
   return require.resolve("tsx/cli");
-}
-
-function resolveElectronBinaryPath(workspaceRoot: string): string {
-  const packageJsonPath = path.join(workspaceRoot, "apps/desktop/package.json");
-  const require = createRequire(packageJsonPath);
-  const electron = require("electron") as unknown;
-  if (typeof electron === "string" && electron.length > 0) return electron;
-  return require.resolve("electron/cli.js");
 }
 
 function resolveAppConfig(options: {
@@ -164,9 +154,6 @@ export function resolveToolDevConfig(options: ToolDevOptions = {}): ToolDevConfi
   const daemon = resolveAppConfig({ app: APP_KEYS.DAEMON, namespace, namespaceRoot, toolsDevRoot });
   const desktop = resolveAppConfig({ app: APP_KEYS.DESKTOP, namespace, namespaceRoot, toolsDevRoot });
   const web = resolveAppConfig({ app: APP_KEYS.WEB, namespace, namespaceRoot, toolsDevRoot });
-  const desktopPackageJsonPath = path.join(WORKSPACE_ROOT, "apps/desktop/package.json");
-  let cachedElectronBinaryPath: string | undefined;
-
   return {
     apps: {
       daemon: {
@@ -175,12 +162,7 @@ export function resolveToolDevConfig(options: ToolDevOptions = {}): ToolDevConfi
       },
       desktop: {
         ...desktop,
-        get electronBinaryPath() {
-          if (cachedElectronBinaryPath == null) cachedElectronBinaryPath = resolveElectronBinaryPath(WORKSPACE_ROOT);
-          return cachedElectronBinaryPath;
-        },
-        mainEntryPath: path.join(WORKSPACE_ROOT, "apps/desktop/dist/main/index.js"),
-        packageJsonPath: desktopPackageJsonPath,
+        sidecarEntryPath: path.join(WORKSPACE_ROOT, "apps/desktop/src/dev-launcher.ts"),
       },
       web: {
         ...web,
