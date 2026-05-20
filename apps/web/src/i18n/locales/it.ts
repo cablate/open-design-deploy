@@ -182,8 +182,8 @@ export const it: Dict = {
   'settings.agentInstall.stepSelect': 'Seleziona la scheda dell\'agente una volta che appare come installato.',
   'settings.noAgentsDetected':
     'Nessun agente rilevato per ora. Installa Claude Code, Codex, Devin for Terminal, Gemini CLI, OpenCode, Cursor Agent, Qwen o GitHub Copilot CLI, poi clicca su Rianalizza.',
-  'settings.agentInstalledGroup': 'Your CLIs ({count})',
-  'settings.agentInstallGroup': 'Available to install ({count})',
+  'settings.agentInstalledGroup': 'Le tue CLI ({count})',
+  'settings.agentInstallGroup': 'Disponibili per l\'installazione ({count})',
   'settings.apiSection': 'API Anthropic',
   'settings.quickFillProvider': 'Compilazione rapida del provider',
   'settings.customProvider': 'Provider personalizzato',
@@ -197,8 +197,8 @@ export const it: Dict = {
     'Questi sono modelli suggeriti per questo protocollo. Il tuo provider potrebbe supportare altri modelli.',
   'settings.baseUrl': 'URL di base',
   'settings.baseUrlInvalid': 'Inserisci un URL pubblico http:// o https:// valido. Localhost è consentito; gli IP di rete privata sono bloccati.',
-  'settings.baseUrlCustomize': 'Customize',
-  'settings.baseUrlDefaultHint': 'Default endpoint. Usually no need to change this.',
+  'settings.baseUrlCustomize': 'Personalizza',
+  'settings.baseUrlDefaultHint': 'Endpoint predefinito. Di solito non serve modificarlo.',
   'settings.azureBaseUrlPlaceholder': 'https://my-resource.openai.azure.com',
   'settings.azureBaseUrlHint': 'Find this in Azure portal → your resource → Endpoint.',
   'settings.azureDeploymentModel': 'Nome del deployment',
@@ -224,15 +224,15 @@ export const it: Dict = {
   'settings.themeLight': 'Chiaro',
   'settings.themeDark': 'Scuro',
   'settings.modelPicker': 'Modello',
-  'settings.modelSourceLive': 'Live from CLI',
-  'settings.modelSourceFallback': 'Built-in list',
+  'settings.modelSourceLive': 'Live dalla CLI',
+  'settings.modelSourceFallback': 'Elenco integrato',
   'settings.reasoningPicker': 'Sforzo di ragionamento',
   'settings.modelPickerHint':
     'Recuperato dalla CLI quando espone un comando `models`. "Predefinito" lascia la scelta alla configurazione della CLI; "Personalizzato…" ti permette di inserire qualsiasi identificatore di modello accettato dalla CLI.',
   'settings.modelPickerLiveHint':
-    'Models were refreshed from the installed CLI. Default still uses the CLI config.',
+    'I modelli sono stati aggiornati dalla CLI installata. Predefinito usa ancora la configurazione della CLI.',
   'settings.modelPickerFallbackHint':
-    'Showing built-in defaults. Click Rescan to pull live models from the CLI.',
+    'Mostra i valori predefiniti integrati. Clicca su Rianalizza per recuperare i modelli live dalla CLI.',
   'settings.cliEnvTitle': 'Posizioni di configurazione CLI',
   'settings.cliEnvHint':
     'Imposta directory di configurazione non segrete per esecuzioni di app impacchettate e rilevamento agenti.',

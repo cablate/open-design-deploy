@@ -183,8 +183,8 @@ export const ko: Dict = {
   'settings.agentInstall.stepSelect': '설치됨으로 표시되면 해당 에이전트 카드를 선택하세요.',
   'settings.noAgentsDetected':
     '에이전트가 감지되지 않았습니다. Claude Code, Codex, Devin for Terminal, Gemini CLI, OpenCode, Cursor Agent, Qwen 또는 GitHub Copilot CLI 중 하나를 설치한 후 다시 스캔을 클릭하세요.',
-  'settings.agentInstalledGroup': 'Your CLIs ({count})',
-  'settings.agentInstallGroup': 'Available to install ({count})',
+  'settings.agentInstalledGroup': '내 CLI ({count})',
+  'settings.agentInstallGroup': '설치 가능 ({count})',
   'settings.agentAuthRequired': '인증 필요',
   'settings.agentAuthUnknown': '인증 상태를 알 수 없음',
   'settings.apiSection': 'Anthropic API',
@@ -203,8 +203,8 @@ export const ko: Dict = {
     '응답 길이 상한입니다. 각 모델에는 기본값이 미리 조정되어 있으며(placeholder로 표시됨), 비워 두면 그 값을 사용하고 숫자를 입력하면 덮어씁니다.',
   'settings.baseUrl': 'Base URL',
   'settings.baseUrlInvalid': '유효한 공개 http:// 또는 https:// URL을 입력하세요. localhost는 허용되며 사설 네트워크 IP는 차단됩니다.',
-  'settings.baseUrlCustomize': 'Customize',
-  'settings.baseUrlDefaultHint': 'Default endpoint. Usually no need to change this.',
+  'settings.baseUrlCustomize': '사용자 지정',
+  'settings.baseUrlDefaultHint': '기본 엔드포인트입니다. 보통 변경할 필요가 없습니다.',
   'settings.azureBaseUrlPlaceholder': 'https://my-resource.openai.azure.com',
   'settings.azureBaseUrlHint': 'Find this in Azure portal → your resource → Endpoint.',
   'settings.azureDeploymentModel': '배포 이름',
@@ -228,15 +228,15 @@ export const ko: Dict = {
   'settings.themeDark': '다크',
   'settings.agentModelHead': '모델:',
   'settings.modelPicker': '모델',
-  'settings.modelSourceLive': 'Live from CLI',
-  'settings.modelSourceFallback': 'Built-in list',
+  'settings.modelSourceLive': 'CLI에서 실시간 가져옴',
+  'settings.modelSourceFallback': '내장 목록',
   'settings.reasoningPicker': '추론 (Reasoning)',
   'settings.modelPickerHint':
     'CLI가 `models` 명령어를 지원할 때 가져옵니다. "Default"는 CLI 자체 설정을 따르며, "직접 입력…"을 선택하면 CLI가 허용하는 모델 ID를 입력할 수 있습니다.',
   'settings.modelPickerLiveHint':
-    'Models were refreshed from the installed CLI. Default still uses the CLI config.',
+    '설치된 CLI에서 모델을 새로 고쳤습니다. 기본값은 계속 CLI 구성을 사용합니다.',
   'settings.modelPickerFallbackHint':
-    'Showing built-in defaults. Click Rescan to pull live models from the CLI.',
+    '내장 기본값을 표시 중입니다. CLI에서 실시간 모델을 가져오려면 다시 스캔을 클릭하세요.',
   'settings.cliEnvTitle': 'CLI config locations',
   'settings.cliEnvHint':
     'Set non-secret config directories for packaged app runs and agent detection.',

@@ -183,8 +183,8 @@ export const ar: Dict = {
   'settings.agentInstall.stepSelect': 'اختر بطاقة الوكيل عندما يظهر كأنه مثبت.',
   'settings.noAgentsDetected':
     'لم يتم اكتشاف أي وكلاء بعد. قم بتثبيت Claude Code أو Codex أو Devin أو Gemini CLI أو OpenCode أو Cursor Agent أو Qwen أو GitHub Copilot CLI، ثم اضغط على إعادة المسح.',
-  'settings.agentInstalledGroup': 'Your CLIs ({count})',
-  'settings.agentInstallGroup': 'Available to install ({count})',
+  'settings.agentInstalledGroup': 'واجهات CLI لديك ({count})',
+  'settings.agentInstallGroup': 'متاحة للتثبيت ({count})',
   'settings.agentAuthRequired': 'المصادقة مطلوبة',
   'settings.agentAuthUnknown': 'حالة المصادقة غير معروفة',
   'settings.apiSection': 'Anthropic API',
@@ -200,8 +200,8 @@ export const ar: Dict = {
     'هذه نماذج مقترحة لهذا البروتوكول. قد يدعم مزوّدك نماذج مختلفة.',
   'settings.baseUrl': 'رابط القاعدة',
   'settings.baseUrlInvalid': 'أدخل رابط http:// أو https:// عام وصالح. يُسمح بـ localhost؛ ويتم حظر عناوين IP للشبكات الخاصة.',
-  'settings.baseUrlCustomize': 'Customize',
-  'settings.baseUrlDefaultHint': 'Default endpoint. Usually no need to change this.',
+  'settings.baseUrlCustomize': 'تخصيص',
+  'settings.baseUrlDefaultHint': 'نقطة النهاية الافتراضية. عادة لا تحتاج إلى تغييرها.',
   'settings.azureBaseUrlPlaceholder': 'https://my-resource.openai.azure.com',
   'settings.azureBaseUrlHint': 'Find this in Azure portal → your resource → Endpoint.',
   'settings.azureDeploymentModel': 'اسم النشر',
@@ -228,15 +228,15 @@ export const ar: Dict = {
   'settings.themeDark': 'داكن',
   'settings.agentModelHead': 'النموذج لـ:',
   'settings.modelPicker': 'النموذج',
-  'settings.modelSourceLive': 'Live from CLI',
-  'settings.modelSourceFallback': 'Built-in list',
+  'settings.modelSourceLive': 'مباشر من CLI',
+  'settings.modelSourceFallback': 'القائمة المضمنة',
   'settings.reasoningPicker': 'جهد التفكير',
   'settings.modelPickerHint':
     'يتم جلبه من CLI عندما يعرض أمر `models`. "الافتراضي" يترك الخيار لإعدادات CLI؛ "مخصص..." يسمح لك بكتابة أي معرف نموذج يقبله CLI.',
   'settings.modelPickerLiveHint':
-    'Models were refreshed from the installed CLI. Default still uses the CLI config.',
+    'تم تحديث النماذج من CLI المثبت. لا يزال الخيار الافتراضي يستخدم إعدادات CLI.',
   'settings.modelPickerFallbackHint':
-    'Showing built-in defaults. Click Rescan to pull live models from the CLI.',
+    'يتم عرض الإعدادات الافتراضية المضمنة. انقر على إعادة المسح لجلب النماذج المباشرة من CLI.',
   'settings.cliEnvTitle': 'CLI config locations',
   'settings.cliEnvHint':
     'Set non-secret config directories for packaged app runs and agent detection.',

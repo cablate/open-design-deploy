@@ -182,8 +182,8 @@ export const zhTW: Dict = {
   'settings.agentInstall.stepSelect': '當代理顯示為已安裝後，選擇該代理卡片。',
   'settings.noAgentsDetected':
     '尚未偵測到任何代理。請安裝 Claude Code、Codex、Gemini CLI、OpenCode、Cursor Agent 或 Qwen 其中之一，然後點擊「重新掃描」。',
-  'settings.agentInstalledGroup': 'Your CLIs ({count})',
-  'settings.agentInstallGroup': 'Available to install ({count})',
+  'settings.agentInstalledGroup': '你的 CLI（{count}）',
+  'settings.agentInstallGroup': '可安裝（{count}）',
   'settings.agentAuthRequired': '需要認證',
   'settings.agentAuthUnknown': '認證狀態未知',
   'settings.apiSection': 'API 設定',
@@ -199,8 +199,8 @@ export const zhTW: Dict = {
     '這些是此協定的建議模型。你的提供方可能支援不同的模型。',
   'settings.baseUrl': 'Base URL',
   'settings.baseUrlInvalid': '請輸入有效的公網 http:// 或 https:// URL。允許 localhost；會阻止私有網路 IP。',
-  'settings.baseUrlCustomize': 'Customize',
-  'settings.baseUrlDefaultHint': 'Default endpoint. Usually no need to change this.',
+  'settings.baseUrlCustomize': '自訂',
+  'settings.baseUrlDefaultHint': '預設端點，通常不需要修改。',
   'settings.azureBaseUrlPlaceholder': 'https://my-resource.openai.azure.com',
   'settings.azureBaseUrlHint': 'Find this in Azure portal → your resource → Endpoint.',
   'settings.azureDeploymentModel': '部署名稱',
@@ -227,15 +227,15 @@ export const zhTW: Dict = {
   'settings.themeDark': '深色',
   'settings.agentModelHead': '模型：',
   'settings.modelPicker': '模型',
-  'settings.modelSourceLive': 'Live from CLI',
-  'settings.modelSourceFallback': 'Built-in list',
+  'settings.modelSourceLive': '來自 CLI 的即時列表',
+  'settings.modelSourceFallback': '內建列表',
   'settings.reasoningPicker': '推理強度',
   'settings.modelPickerHint':
     '當 CLI 提供 `models` 命令時會自動拉取。選擇「預設」則沿用 CLI 自身的設定；選擇「自訂」可手動輸入任何 CLI 支援的模型 id。',
   'settings.modelPickerLiveHint':
-    'Models were refreshed from the installed CLI. Default still uses the CLI config.',
+    '已從已安裝的 CLI 重新整理模型。「預設」仍使用 CLI 自身設定。',
   'settings.modelPickerFallbackHint':
-    'Showing built-in defaults. Click Rescan to pull live models from the CLI.',
+    '正在顯示內建預設值。點擊「重新掃描」可從 CLI 拉取即時模型。',
   'settings.cliEnvTitle': 'CLI 設定位置',
   'settings.cliEnvHint':
     '為打包版應用執行和 agent 偵測設定非敏感設定目錄。',

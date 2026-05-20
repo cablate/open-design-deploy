@@ -183,8 +183,8 @@ export const fa: Dict = {
   'settings.agentInstall.stepSelect': 'وقتی عامل به‌صورت نصب‌شده نمایش داده شد، کارت آن را انتخاب کنید.',
   'settings.noAgentsDetected':
     'هنوز هیچ عاملی شناسایی نشده. یکی از Claude Code، Codex، Gemini CLI، OpenCode، Cursor Agent، Qwen یا GitHub Copilot CLI را نصب کنید، سپس روی اسکن مجدد کلیک کنید.',
-  'settings.agentInstalledGroup': 'Your CLIs ({count})',
-  'settings.agentInstallGroup': 'Available to install ({count})',
+  'settings.agentInstalledGroup': 'CLIهای شما ({count})',
+  'settings.agentInstallGroup': 'آماده نصب ({count})',
   'settings.agentAuthRequired': 'احراز هویت لازم است',
   'settings.agentAuthUnknown': 'وضعیت احراز هویت نامشخص است',
   'settings.apiSection': 'Anthropic API',
@@ -200,8 +200,8 @@ export const fa: Dict = {
     'این‌ها مدل‌های پیشنهادی برای این پروتکل هستند. ارائه‌دهنده شما ممکن است مدل‌های دیگری را پشتیبانی کند.',
   'settings.baseUrl': 'آدرس پایه',
   'settings.baseUrlInvalid': 'یک URL عمومی معتبر با http:// یا https:// وارد کنید. localhost مجاز است؛ IPهای شبکه خصوصی مسدود می‌شوند.',
-  'settings.baseUrlCustomize': 'Customize',
-  'settings.baseUrlDefaultHint': 'Default endpoint. Usually no need to change this.',
+  'settings.baseUrlCustomize': 'سفارشی‌سازی',
+  'settings.baseUrlDefaultHint': 'نقطه پایانی پیش‌فرض. معمولاً نیازی به تغییر آن نیست.',
   'settings.azureBaseUrlPlaceholder': 'https://my-resource.openai.azure.com',
   'settings.azureBaseUrlHint': 'Find this in Azure portal → your resource → Endpoint.',
   'settings.azureDeploymentModel': 'نام استقرار',
@@ -228,15 +228,15 @@ export const fa: Dict = {
   'settings.themeDark': 'تاریک',
   'settings.agentModelHead': 'مدل برای:',
   'settings.modelPicker': 'مدل',
-  'settings.modelSourceLive': 'Live from CLI',
-  'settings.modelSourceFallback': 'Built-in list',
+  'settings.modelSourceLive': 'زنده از CLI',
+  'settings.modelSourceFallback': 'فهرست داخلی',
   'settings.reasoningPicker': 'سطح استدلال',
   'settings.modelPickerHint':
     'هنگامی که CLI یک دستور `models` را ارائه می‌دهد از آن دریافت می‌شود. «پیش‌فرض» انتخاب را به پیکربندی خود CLI واگذار می‌کند؛ «سفارشی…» به شما امکان می‌دهد هر شناسه مدلی را که CLI می‌پذیرد تایپ کنید.',
   'settings.modelPickerLiveHint':
-    'Models were refreshed from the installed CLI. Default still uses the CLI config.',
+    'مدل‌ها از CLI نصب‌شده به‌روزرسانی شدند. گزینه پیش‌فرض همچنان از تنظیمات CLI استفاده می‌کند.',
   'settings.modelPickerFallbackHint':
-    'Showing built-in defaults. Click Rescan to pull live models from the CLI.',
+    'پیش‌فرض‌های داخلی نمایش داده می‌شوند. برای دریافت مدل‌های زنده از CLI روی اسکن مجدد کلیک کنید.',
   'settings.cliEnvTitle': 'CLI config locations',
   'settings.cliEnvHint':
     'Set non-secret config directories for packaged app runs and agent detection.',

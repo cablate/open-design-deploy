@@ -266,15 +266,15 @@ export const zhCN: Dict = {
   'settings.themeDark': '深色',
   'settings.agentModelHead': '模型：',
   'settings.modelPicker': '模型',
-  'settings.modelSourceLive': 'Live from CLI',
-  'settings.modelSourceFallback': 'Built-in list',
+  'settings.modelSourceLive': '来自 CLI 的实时列表',
+  'settings.modelSourceFallback': '内置列表',
   'settings.reasoningPicker': '推理强度',
   'settings.modelPickerHint':
     '当 CLI 提供 `models` 命令时会自动拉取。选择「默认」则沿用 CLI 自身的配置；选择「自定义」可手动输入任何 CLI 支持的模型 id。',
   'settings.modelPickerLiveHint':
-    'Models were refreshed from the installed CLI. Default still uses the CLI config.',
+    '已从已安装的 CLI 刷新模型。“默认”仍使用 CLI 自身配置。',
   'settings.modelPickerFallbackHint':
-    'Showing built-in defaults. Click Rescan to pull live models from the CLI.',
+    '正在显示内置默认值。点击“重新扫描”可从 CLI 拉取实时模型。',
   'settings.cliEnvTitle': 'CLI 配置位置',
   'settings.cliEnvHint':
     '为打包版应用运行和 agent 检测设置非敏感配置目录。',

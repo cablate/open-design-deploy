@@ -183,8 +183,8 @@ export const id: Dict = {
   'settings.agentInstall.stepSelect': 'Pilih kartu agen setelah statusnya terpasang.',
   'settings.noAgentsDetected':
     'Belum ada agent terdeteksi. Pasang salah satu dari Claude Code, Codex, Devin for Terminal, Gemini CLI, OpenCode, Cursor Agent, Qwen, atau GitHub Copilot CLI, lalu klik pindai ulang.',
-  'settings.agentInstalledGroup': 'Your CLIs ({count})',
-  'settings.agentInstallGroup': 'Available to install ({count})',
+  'settings.agentInstalledGroup': 'CLI Anda ({count})',
+  'settings.agentInstallGroup': 'Tersedia untuk dipasang ({count})',
   'settings.agentAuthRequired': 'Autentikasi diperlukan',
   'settings.agentAuthUnknown': 'Status autentikasi tidak diketahui',
   'settings.apiSection': 'Anthropic API',
@@ -225,15 +225,15 @@ export const id: Dict = {
   'settings.themeDark': 'Gelap',
   'settings.agentModelHead': 'Model untuk:',
   'settings.modelPicker': 'Model',
-  'settings.modelSourceLive': 'Live from CLI',
-  'settings.modelSourceFallback': 'Built-in list',
+  'settings.modelSourceLive': 'Langsung dari CLI',
+  'settings.modelSourceFallback': 'Daftar bawaan',
   'settings.reasoningPicker': 'Kekuatan penalaran',
   'settings.modelPickerHint':
     'Diambil dari CLI jika tersedia. "Default" mengikuti konfigurasi CLI; "Custom..." untuk mengetik model id sendiri.',
   'settings.modelPickerLiveHint':
-    'Models were refreshed from the installed CLI. Default still uses the CLI config.',
+    'Model diperbarui dari CLI yang terpasang. Default tetap memakai konfigurasi CLI.',
   'settings.modelPickerFallbackHint':
-    'Showing built-in defaults. Click Rescan to pull live models from the CLI.',
+    'Menampilkan default bawaan. Klik Pindai ulang untuk mengambil model langsung dari CLI.',
   'settings.cliEnvTitle': 'Lokasi konfigurasi CLI',
   'settings.cliEnvHint': 'Atur direktori konfigurasi non-rahasia untuk menjalankan aplikasi paket dan deteksi agent.',
   'settings.cliEnvClaudeConfigDir': 'Direktori konfigurasi Claude Code',

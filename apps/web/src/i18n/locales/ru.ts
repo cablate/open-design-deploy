@@ -183,8 +183,8 @@ export const ru: Dict = {
   'settings.agentInstall.stepSelect': 'Выберите карточку агента, когда он появится как установленный.',
   'settings.noAgentsDetected':
     'Агенты ещё не обнаружены. Установите один из следующих инструментов: Claude Code, Codex, Devin for Terminal, Gemini CLI, OpenCode, Cursor Agent, Qwen или GitHub Copilot CLI, затем нажмите «Пересканировать».',
-  'settings.agentInstalledGroup': 'Your CLIs ({count})',
-  'settings.agentInstallGroup': 'Available to install ({count})',
+  'settings.agentInstalledGroup': 'Ваши CLI ({count})',
+  'settings.agentInstallGroup': 'Доступно для установки ({count})',
   'settings.agentAuthRequired': 'Требуется аутентификация',
   'settings.agentAuthUnknown': 'Статус аутентификации неизвестен',
   'settings.apiSection': 'Anthropic API',
@@ -200,8 +200,8 @@ export const ru: Dict = {
     'Это рекомендуемые модели для этого протокола. Ваш провайдер может поддерживать другие модели.',
   'settings.baseUrl': 'Базовый URL',
   'settings.baseUrlInvalid': 'Введите корректный публичный URL с http:// или https://. Localhost разрешен; IP частных сетей блокируются.',
-  'settings.baseUrlCustomize': 'Customize',
-  'settings.baseUrlDefaultHint': 'Default endpoint. Usually no need to change this.',
+  'settings.baseUrlCustomize': 'Настроить',
+  'settings.baseUrlDefaultHint': 'Эндпоинт по умолчанию. Обычно его не нужно менять.',
   'settings.azureBaseUrlPlaceholder': 'https://my-resource.openai.azure.com',
   'settings.azureBaseUrlHint': 'Find this in Azure portal → your resource → Endpoint.',
   'settings.azureDeploymentModel': 'Имя развертывания',
@@ -228,15 +228,15 @@ export const ru: Dict = {
   'settings.themeDark': 'Тёмная',
   'settings.agentModelHead': 'Модель для:',
   'settings.modelPicker': 'Модель',
-  'settings.modelSourceLive': 'Live from CLI',
-  'settings.modelSourceFallback': 'Built-in list',
+  'settings.modelSourceLive': 'Из CLI в реальном времени',
+  'settings.modelSourceFallback': 'Встроенный список',
   'settings.reasoningPicker': 'Сложность рассуждений',
   'settings.modelPickerHint':
     'Получается из CLI, если он поддерживает команду `models`. «По умолчанию» оставляет выбор конфигурации CLI, а «Пользовательская…» позволяет ввести любой ID модели, который CLI принимает.',
   'settings.modelPickerLiveHint':
-    'Models were refreshed from the installed CLI. Default still uses the CLI config.',
+    'Модели обновлены из установленного CLI. Вариант по умолчанию по-прежнему использует конфигурацию CLI.',
   'settings.modelPickerFallbackHint':
-    'Showing built-in defaults. Click Rescan to pull live models from the CLI.',
+    'Показаны встроенные значения по умолчанию. Нажмите «Пересканировать», чтобы получить актуальные модели из CLI.',
   'settings.cliEnvTitle': 'CLI config locations',
   'settings.cliEnvHint':
     'Set non-secret config directories for packaged app runs and agent detection.',

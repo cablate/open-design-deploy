@@ -183,8 +183,8 @@ export const fr: Dict = {
   'settings.agentInstall.stepSelect': 'Sélectionnez la carte de l\'agent une fois qu\'elle apparaît comme installée.',
   'settings.noAgentsDetected':
     'Aucun agent détecté pour l\'instant. Installez Claude Code, Codex, Devin for Terminal, Gemini CLI, OpenCode, Cursor Agent, Qwen ou GitHub Copilot CLI, puis cliquez sur Réanalyser.',
-  'settings.agentInstalledGroup': 'Your CLIs ({count})',
-  'settings.agentInstallGroup': 'Available to install ({count})',
+  'settings.agentInstalledGroup': 'Vos CLI ({count})',
+  'settings.agentInstallGroup': 'Disponibles à installer ({count})',
   'settings.agentAuthRequired': 'Authentification requise',
   'settings.agentAuthUnknown': 'Statut d’authentification inconnu',
   'settings.apiSection': 'API Anthropic',
@@ -200,8 +200,8 @@ export const fr: Dict = {
     'Ce sont des modèles suggérés pour ce protocole. Votre fournisseur peut prendre en charge d\'autres modèles.',
   'settings.baseUrl': 'URL de base',
   'settings.baseUrlInvalid': 'Saisissez une URL publique http:// ou https:// valide. Localhost est autorisé ; les IP de réseau privé sont bloquées.',
-  'settings.baseUrlCustomize': 'Customize',
-  'settings.baseUrlDefaultHint': 'Default endpoint. Usually no need to change this.',
+  'settings.baseUrlCustomize': 'Personnaliser',
+  'settings.baseUrlDefaultHint': 'Point de terminaison par défaut. Inutile de le modifier dans la plupart des cas.',
   'settings.azureBaseUrlPlaceholder': 'https://my-resource.openai.azure.com',
   'settings.azureBaseUrlHint': 'Find this in Azure portal → your resource → Endpoint.',
   'settings.azureDeploymentModel': 'Nom du déploiement',
@@ -229,14 +229,14 @@ export const fr: Dict = {
   'settings.agentModelHead': 'Modèle pour :',
   'settings.modelPicker': 'Modèle',
   'settings.modelSourceLive': 'En direct depuis la CLI',
-  'settings.modelSourceFallback': 'Built-in list',
+  'settings.modelSourceFallback': 'Liste intégrée',
   'settings.reasoningPicker': 'Effort de raisonnement',
   'settings.modelPickerHint':
     'Par défaut utilise la configuration propre de la CLI. Personnalisé… vous permet de saisir n’importe quel identifiant de modèle.',
   'settings.modelPickerLiveHint':
     'Les modèles ont été actualisés depuis la CLI installée. Par défaut utilise toujours la configuration propre de la CLI.',
   'settings.modelPickerFallbackHint':
-    'Showing built-in defaults. Click Rescan to pull live models from the CLI.',
+    'Valeurs par défaut intégrées affichées. Cliquez sur Réanalyser pour récupérer les modèles en direct depuis la CLI.',
   'settings.cliEnvTitle': 'Avancé : proxy et chemins personnalisés',
   'settings.cliEnvHint':
     'Utilisez ces réglages uniquement si vous routez le trafic CLI via votre propre proxy ou si le binaire est installé à un emplacement non standard. Les secrets restent dans la configuration locale de l’app et seule la CLI sélectionnée les voit.',

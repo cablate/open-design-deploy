@@ -183,8 +183,8 @@ export const de: Dict = {
   'settings.agentInstall.stepSelect': 'Waehlen Sie die Agent-Karte aus, sobald sie als installiert angezeigt wird.',
   'settings.noAgentsDetected':
     'Noch keine Agents erkannt. Installieren Sie Claude Code, Codex, Devin for Terminal, Gemini CLI, OpenCode, Cursor Agent, Qwen oder GitHub Copilot CLI und klicken Sie dann auf Neu scannen.',
-  'settings.agentInstalledGroup': 'Your CLIs ({count})',
-  'settings.agentInstallGroup': 'Available to install ({count})',
+  'settings.agentInstalledGroup': 'Ihre CLIs ({count})',
+  'settings.agentInstallGroup': 'Zur Installation verfügbar ({count})',
   'settings.agentAuthRequired': 'Authentifizierung erforderlich',
   'settings.agentAuthUnknown': 'Authentifizierungsstatus unbekannt',
   'settings.apiSection': 'Anthropic API',
@@ -200,8 +200,8 @@ export const de: Dict = {
     'Dies sind vorgeschlagene Modelle für dieses Protokoll. Ihr Anbieter kann andere Modelle unterstützen.',
   'settings.baseUrl': 'Base URL',
   'settings.baseUrlInvalid': 'Geben Sie eine gültige öffentliche http://- oder https://-URL ein. Localhost ist erlaubt; private Netzwerk-IPs werden blockiert.',
-  'settings.baseUrlCustomize': 'Customize',
-  'settings.baseUrlDefaultHint': 'Default endpoint. Usually no need to change this.',
+  'settings.baseUrlCustomize': 'Anpassen',
+  'settings.baseUrlDefaultHint': 'Standard-Endpunkt. Normalerweise muss dies nicht geändert werden.',
   'settings.azureBaseUrlPlaceholder': 'https://my-resource.openai.azure.com',
   'settings.azureBaseUrlHint': 'Find this in Azure portal → your resource → Endpoint.',
   'settings.azureDeploymentModel': 'Deployment-Name',
@@ -228,15 +228,15 @@ export const de: Dict = {
   'settings.themeDark': 'Dunkel',
   'settings.agentModelHead': 'Modell für:',
   'settings.modelPicker': 'Modell',
-  'settings.modelSourceLive': 'Live from CLI',
-  'settings.modelSourceFallback': 'Built-in list',
+  'settings.modelSourceLive': 'Live aus der CLI',
+  'settings.modelSourceFallback': 'Integrierte Liste',
   'settings.reasoningPicker': 'Reasoning-Aufwand',
   'settings.modelPickerHint':
     'Wird aus der CLI geladen, wenn sie einen `models`-Befehl anbietet. „Standard“ überlässt die Auswahl der CLI-Konfiguration; mit „Benutzerdefiniert…“ können Sie jede von der CLI akzeptierte Modell-ID eingeben.',
   'settings.modelPickerLiveHint':
-    'Models were refreshed from the installed CLI. Default still uses the CLI config.',
+    'Modelle wurden aus der installierten CLI aktualisiert. Standard verwendet weiterhin die CLI-Konfiguration.',
   'settings.modelPickerFallbackHint':
-    'Showing built-in defaults. Click Rescan to pull live models from the CLI.',
+    'Integrierte Standardwerte werden angezeigt. Klicken Sie auf Neu scannen, um Live-Modelle aus der CLI abzurufen.',
   'settings.cliEnvTitle': 'CLI config locations',
   'settings.cliEnvHint':
     'Set non-secret config directories for packaged app runs and agent detection.',

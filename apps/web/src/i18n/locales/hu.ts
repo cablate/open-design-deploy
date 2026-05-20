@@ -183,8 +183,8 @@ export const hu: Dict = {
   'settings.agentInstall.stepSelect': 'Válaszd ki az ügynök kártyáját, amint telepítettként jelenik meg.',
   'settings.noAgentsDetected':
     'Még nincs észlelt ügynök. Telepítsd a Claude Code, Codex, Devin for Terminal, Gemini CLI, OpenCode, Cursor Agent, Qwen vagy GitHub Copilot CLI valamelyikét, majd kattints az Újraellenőrzésre.',
-  'settings.agentInstalledGroup': 'Your CLIs ({count})',
-  'settings.agentInstallGroup': 'Available to install ({count})',
+  'settings.agentInstalledGroup': 'Saját CLI-k ({count})',
+  'settings.agentInstallGroup': 'Telepíthető ({count})',
   'settings.agentAuthRequired': 'Hitelesítés szükséges',
   'settings.agentAuthUnknown': 'A hitelesítési állapot ismeretlen',
   'settings.apiSection': 'Anthropic API',
@@ -200,8 +200,8 @@ export const hu: Dict = {
     'Ezek a protokollhoz javasolt modellek. A szolgáltatód más modelleket is támogathat.',
   'settings.baseUrl': 'Base URL',
   'settings.baseUrlInvalid': 'Adj meg egy érvényes nyilvános http:// vagy https:// URL-t. A localhost engedélyezett; a privát hálózati IP-k blokkolva vannak.',
-  'settings.baseUrlCustomize': 'Customize',
-  'settings.baseUrlDefaultHint': 'Default endpoint. Usually no need to change this.',
+  'settings.baseUrlCustomize': 'Testreszabás',
+  'settings.baseUrlDefaultHint': 'Alapértelmezett végpont. Általában nem kell módosítani.',
   'settings.azureBaseUrlPlaceholder': 'https://my-resource.openai.azure.com',
   'settings.azureBaseUrlHint': 'Find this in Azure portal → your resource → Endpoint.',
   'settings.azureDeploymentModel': 'Deployment név',
@@ -228,15 +228,15 @@ export const hu: Dict = {
   'settings.themeDark': 'Sötét',
   'settings.agentModelHead': 'Modell ehhez:',
   'settings.modelPicker': 'Modell',
-  'settings.modelSourceLive': 'Live from CLI',
-  'settings.modelSourceFallback': 'Built-in list',
+  'settings.modelSourceLive': 'Élőben a CLI-ből',
+  'settings.modelSourceFallback': 'Beépített lista',
   'settings.reasoningPicker': 'Gondolkodási erőfeszítés',
   'settings.modelPickerHint':
     'A CLI-tól kérdezi le, ha az közzéteszi a `models` parancsot. Az „Alapértelmezett" a CLI saját konfigjára bízza a választást; az „Egyedi…" tetszőleges, a CLI által elfogadott modell-id-t enged megadni.',
   'settings.modelPickerLiveHint':
-    'Models were refreshed from the installed CLI. Default still uses the CLI config.',
+    'A modellek frissültek a telepített CLI-ből. Az Alapértelmezett továbbra is a CLI konfigurációját használja.',
   'settings.modelPickerFallbackHint':
-    'Showing built-in defaults. Click Rescan to pull live models from the CLI.',
+    'A beépített alapértékek láthatók. Kattints az Újraellenőrzésre az élő CLI-modellek lekéréséhez.',
   'settings.cliEnvTitle': 'CLI config locations',
   'settings.cliEnvHint':
     'Set non-secret config directories for packaged app runs and agent detection.',
