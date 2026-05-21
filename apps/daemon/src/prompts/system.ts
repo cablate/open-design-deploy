@@ -151,6 +151,37 @@ type AudioVoiceOption = {
   labels?: Record<string, string> | null;
 };
 
+type ExclusiveSurfaceMode = 'deck' | 'image' | 'video' | 'audio';
+
+const EXCLUSIVE_SURFACE_MODES = new Set<ExclusiveSurfaceMode>(['deck', 'image', 'video', 'audio']);
+
+export function resolveExclusiveSurface(args: {
+  metadata?: ProjectMetadata | undefined;
+  skillMode?: ComposeInput['skillMode'] | undefined;
+  skillModes?: ComposeInput['skillModes'] | undefined;
+}): ExclusiveSurfaceMode | null {
+  const activeSkillModes = new Set(
+    Array.isArray(args.skillModes)
+      ? args.skillModes.filter(Boolean)
+      : args.skillMode
+        ? [args.skillMode]
+        : [],
+  );
+  const metadataSurface = EXCLUSIVE_SURFACE_MODES.has(args.metadata?.kind as ExclusiveSurfaceMode)
+    ? args.metadata?.kind as ExclusiveSurfaceMode
+    : null;
+  const primarySkillSurface = EXCLUSIVE_SURFACE_MODES.has(args.skillMode as ExclusiveSurfaceMode)
+    ? args.skillMode as ExclusiveSurfaceMode
+    : null;
+  const composedSurfaceModes = Array.from(activeSkillModes).filter((mode): mode is ExclusiveSurfaceMode =>
+    EXCLUSIVE_SURFACE_MODES.has(mode as ExclusiveSurfaceMode),
+  );
+
+  return metadataSurface
+    ?? primarySkillSurface
+    ?? (composedSurfaceModes.length === 1 ? composedSurfaceModes[0] ?? null : null);
+}
+
 export const BASE_SYSTEM_PROMPT = OFFICIAL_DESIGNER_PROMPT;
 
 export const SKIP_DISCOVERY_BRIEF_OVERRIDE = `# Automated project mode — skip discovery form
@@ -351,19 +382,7 @@ export function composeSystemPrompt({
         ? [skillMode]
         : [],
   );
-  const exclusiveSurfaceModes = new Set(['deck', 'image', 'video', 'audio'] as const);
-  const metadataSurface = exclusiveSurfaceModes.has(metadata?.kind as any)
-    ? metadata?.kind
-    : null;
-  const primarySkillSurface = exclusiveSurfaceModes.has(skillMode as any)
-    ? skillMode
-    : null;
-  const composedSurfaceModes = Array.from(activeSkillModes).filter((mode) =>
-    exclusiveSurfaceModes.has(mode as any),
-  );
-  const resolvedExclusiveSurface = metadataSurface
-    ?? primarySkillSurface
-    ?? (composedSurfaceModes.length === 1 ? composedSurfaceModes[0] : null);
+  const resolvedExclusiveSurface = resolveExclusiveSurface({ metadata, skillMode, skillModes });
 
   // API/BYOK mode (streamFormat === 'plain'): mirrors the same fix from
   // `@open-design/contracts`'s composer. The daemon hits this path for
