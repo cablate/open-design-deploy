@@ -473,6 +473,20 @@ body::before {
   font-weight: 600;
   margin-bottom: 2px;
 }
+/*
+ * Inline count badge inside a dropdown row (e.g. "Skills 132"). Uses
+ * a distinct class from the absolutely-positioned `.num` on top-row
+ * nav links — there the count floats above the link as a superscript;
+ * here we want it inline beside the label, more like a tag.
+ */
+.nav-dropdown .dropdown-num {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-faint);
+  letter-spacing: 0.02em;
+}
 .nav-dropdown .dropdown-blurb {
   display: block;
   font-size: 12px;
