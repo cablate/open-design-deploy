@@ -1606,8 +1606,16 @@ function OnboardingView({
                   // Failure → emit lifecycle complete with
                   //   `result=failed`, the daemon's failure code, and
                   //   `completed_without_design_system` so we don't
-                  //   overstate completed-with-DS funnel. Clear the
-                  //   session id since the user stays in this view.
+                  //   overstate completed-with-DS funnel. Then re-arm
+                  //   the lifecycle guard (don't clear the session
+                  //   id) so the user's retry attempt — which
+                  //   DesignSystemCreationFlow leaves them in by
+                  //   bouncing back to its setup step — emits a
+                  //   second complete row under the SAME
+                  //   onboarding_session_id, and any eventual
+                  //   success can still navigate to ProjectView with
+                  //   the id intact for step 4. Tracked by mrcfps
+                  //   review on PR #2590 (2026-05-21 14:45).
                   if (outcome.result === 'success') {
                     emitOnboardingComplete(
                       'completed',
@@ -1621,7 +1629,7 @@ function OnboardingView({
                     'completed_without_design_system',
                     { sourceSnapshot: snapshot, errorCode: outcome.errorCode },
                   );
-                  clearOnboardingSessionId();
+                  lifecycleReportedRef.current = false;
                 },
               })}
             </div>
