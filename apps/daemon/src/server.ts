@@ -340,6 +340,7 @@ import {
   upsertDeployment,
   upsertMessage,
   upsertPreviewComment,
+  truncateConversationMessages,
 } from './db.js';
 import {
   createLiveArtifact,
