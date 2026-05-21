@@ -188,6 +188,27 @@ describe('composeSystemPrompt', () => {
     expect(prompt).not.toContain('**platformTargets**');
   });
 
+  it('uses the primary skill surface when composed skill modes conflict', () => {
+    const prompt = composeSystemPrompt({
+      skillMode: 'image',
+      skillModes: ['deck', 'image'],
+    });
+
+    expect(prompt).toContain('## Media generation contract');
+    expect(prompt).not.toContain('# Slide deck — fixed framework');
+  });
+
+  it('lets metadata.kind win over conflicting composed skill modes', () => {
+    const prompt = composeSystemPrompt({
+      skillMode: 'image',
+      skillModes: ['deck', 'image'],
+      metadata: { kind: 'deck' } as any,
+    });
+
+    expect(prompt).toContain('# Slide deck — fixed framework');
+    expect(prompt).not.toContain('## Media generation contract');
+  });
+
   describe('artifact handoff no-emit clauses (#1143)', () => {
     it('drops the absolute "non-negotiable" framing in favor of conditional language', () => {
       const prompt = composeSystemPrompt({});
