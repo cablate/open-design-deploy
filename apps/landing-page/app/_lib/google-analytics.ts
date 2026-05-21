@@ -1,10 +1,13 @@
 export const GA_MEASUREMENT_ID = 'G-N567SYTTWR';
 
 export const GOOGLE_ANALYTICS_HEAD_HTML = `<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  var gtagScript = document.createElement('script');
+  gtagScript.async = true;
+  gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}';
+  document.head.appendChild(gtagScript);
   gtag('js', new Date());
 
   gtag('config', '${GA_MEASUREMENT_ID}');
