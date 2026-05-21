@@ -112,6 +112,35 @@ describe('conversation timestamps', () => {
     expect(onEditUserMessage).toHaveBeenCalledWith(message, 'Make a launch poster');
   });
 
+  it('lets the latest assistant message regenerate', () => {
+    const onRegenerateAssistantMessage = vi.fn();
+    const assistant: ChatMessage = {
+      id: 'assistant-1',
+      role: 'assistant',
+      content: 'Try another answer',
+      createdAt: Date.parse('2025-01-15T12:01:00Z'),
+      startedAt: Date.parse('2025-01-15T12:01:00Z'),
+      endedAt: Date.parse('2025-01-15T12:01:05Z'),
+      runStatus: 'failed',
+    };
+    renderChatPane(
+      [
+        {
+          id: 'user-1',
+          role: 'user',
+          content: 'Make a poster',
+          createdAt: Date.parse('2025-01-15T12:00:00Z'),
+        },
+        assistant,
+      ],
+      { onRegenerateAssistantMessage },
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Regenerate' }));
+
+    expect(onRegenerateAssistantMessage).toHaveBeenCalledWith(assistant);
+  });
+
   it('does not treat a completed last assistant message as streaming just because another conversation is running', () => {
     const message: ChatMessage = {
       id: 'assistant-1',

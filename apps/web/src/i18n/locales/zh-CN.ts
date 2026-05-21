@@ -1222,6 +1222,7 @@ export const zhCN: Dict = {
   'chat.copyDone': '已复制！',
   'chat.editAndResend': '编辑并重发',
   'chat.saveAndResend': '保存并重发',
+  'chat.regenerate': '重新生成',
   'chat.composerPlaceholder': '描述你想要的设计 — 粘贴图片、@ 文件或技能、/ 调出命令…',
   'chat.composerHint': '⌘/Ctrl + Enter 发送 · 可粘贴图片 · @ 引用文件或技能 · / 调出命令',
   'chat.cliSettingsTitle': 'CLI 与模型设置',

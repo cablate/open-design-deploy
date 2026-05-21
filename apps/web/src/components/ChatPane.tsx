@@ -247,6 +247,7 @@ interface Props {
     action: PluginFolderAgentAction,
   ) => Promise<void> | void;
   onEditUserMessage?: (message: ChatMessage, nextPrompt: string) => Promise<void> | void;
+  onRegenerateAssistantMessage?: (message: ChatMessage) => Promise<void> | void;
   initialDraft?: string;
   // Question-form submissions become a normal user message; the parent
   // routes that text through onSend (no attachments).
@@ -322,6 +323,7 @@ export function ChatPane({
   onRequestOpenFile,
   onRequestPluginFolderAgentAction,
   onEditUserMessage,
+  onRegenerateAssistantMessage,
   initialDraft,
   onSubmitForm,
   onContinueRemainingTasks,
@@ -888,6 +890,11 @@ export function ChatPane({
                         onContinueRemainingTasks={
                           m.id === lastAssistantId && onContinueRemainingTasks
                             ? (todos) => onContinueRemainingTasks(m, todos)
+                            : undefined
+                        }
+                        onRegenerate={
+                          m.id === lastAssistantId && onRegenerateAssistantMessage
+                            ? () => onRegenerateAssistantMessage(m)
                             : undefined
                         }
                         onFeedback={

@@ -1513,6 +1513,7 @@ export interface Dict {
   'chat.copyDone': string;
   'chat.editAndResend': string;
   'chat.saveAndResend': string;
+  'chat.regenerate': string;
   'chat.composerPlaceholder': string;
   'chat.composerHint': string;
   'chat.cliSettingsTitle': string;

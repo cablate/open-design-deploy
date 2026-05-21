@@ -772,6 +772,7 @@ export const ru: Dict = {
   'chat.copyDone': 'Скопировано!',
   'chat.editAndResend': 'Изменить и отправить снова',
   'chat.saveAndResend': 'Сохранить и отправить снова',
+  'chat.regenerate': 'Сгенерировать заново',
   'chat.composerPlaceholder':
     'Опишите дизайн, который вы хотите — вставьте или добавьте изображения, или @ файл либо навык…',
   'chat.composerHint':

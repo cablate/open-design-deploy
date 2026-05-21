@@ -640,6 +640,7 @@ export const esES: Dict = {
   'chat.copyDone': '¡Copiado!',
   'chat.editAndResend': 'Editar y reenviar',
   'chat.saveAndResend': 'Guardar y reenviar',
+  'chat.regenerate': 'Regenerar',
   'chat.composerPlaceholder':
     'Describe el diseño que quieres: pega o suelta imágenes, o usa @ para referenciar un archivo o skill…',
   'chat.composerHint':

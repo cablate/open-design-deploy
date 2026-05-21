@@ -638,6 +638,7 @@ export const ja: Dict = {
   'chat.copyDone': 'コピーしました！',
   'chat.editAndResend': '編集して再送信',
   'chat.saveAndResend': '保存して再送信',
+  'chat.regenerate': '再生成',
   'chat.composerPlaceholder':
     '欲しいデザインを説明してください — 画像を貼り付けるかドロップ、または @ でファイルやスキルを参照…',
   'chat.composerHint':

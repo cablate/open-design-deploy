@@ -863,6 +863,7 @@ export const id: Dict = {
   'chat.copyDone': 'Disalin!',
   'chat.editAndResend': 'Edit dan kirim ulang',
   'chat.saveAndResend': 'Simpan dan kirim ulang',
+  'chat.regenerate': 'Buat ulang',
   'chat.composerPlaceholder':
     'Jelaskan desain yang kamu inginkan — tempel atau jatuhkan gambar, atau @ file atau skill…',
   'chat.composerHint':

@@ -1228,6 +1228,7 @@ export const en: Dict = {
   'chat.copyDone': 'Copied!',
   'chat.editAndResend': 'Edit and resend',
   'chat.saveAndResend': 'Save and resend',
+  'chat.regenerate': 'Regenerate',
   'chat.composerPlaceholder':
     'Describe the design you want — paste images, @ files or skills, or / for commands…',
   'chat.composerHint':

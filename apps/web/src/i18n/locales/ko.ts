@@ -751,6 +751,7 @@ export const ko: Dict = {
   'chat.copyDone': '복사됨!',
   'chat.editAndResend': '수정 후 다시 보내기',
   'chat.saveAndResend': '저장 후 다시 보내기',
+  'chat.regenerate': '다시 생성',
   'chat.composerPlaceholder':
     '원하는 디자인을 설명하세요 — 이미지 붙여넣기/끌어놓기 가능, @로 파일이나 스킬 참조…',
   'chat.composerHint':

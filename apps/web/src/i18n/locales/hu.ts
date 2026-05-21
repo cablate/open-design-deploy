@@ -751,6 +751,7 @@ export const hu: Dict = {
   'chat.copyDone': 'Másolva!',
   'chat.editAndResend': 'Szerkesztés és újraküldés',
   'chat.saveAndResend': 'Mentés és újraküldés',
+  'chat.regenerate': 'Újragenerálás',
   'chat.composerPlaceholder':
     'Írd le a kívánt designt — illessz be vagy húzz képeket, vagy @-tel hivatkozz fájlra vagy skillre…',
   'chat.composerHint':

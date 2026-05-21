@@ -16874,6 +16874,32 @@ body.entry-resizing { cursor: col-resize; user-select: none; }
   border-left: 1px solid var(--border);
   color: var(--text-muted);
 }
+.assistant-footer-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 2px;
+  padding-left: 8px;
+  border-left: 1px solid var(--border);
+}
+.assistant-footer-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.assistant-footer-action:hover {
+  background: var(--bg-subtle);
+  border-color: var(--border);
+  color: var(--text-strong);
+}
 .assistant-feedback-button {
   position: relative;
   display: inline-flex;

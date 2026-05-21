@@ -772,6 +772,7 @@ export const ptBR: Dict = {
   'chat.copyDone': 'Copiado!',
   'chat.editAndResend': 'Editar e reenviar',
   'chat.saveAndResend': 'Salvar e reenviar',
+  'chat.regenerate': 'Regenerar',
   'chat.composerPlaceholder':
     'Descreva o design que você quer — cole ou arraste imagens, ou use @ para referenciar um arquivo ou skill…',
   'chat.composerHint':

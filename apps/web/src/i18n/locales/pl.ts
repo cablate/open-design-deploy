@@ -751,6 +751,7 @@ export const pl: Dict = {
   'chat.copyDone': 'Skopiowano!',
   'chat.editAndResend': 'Edytuj i wyślij ponownie',
   'chat.saveAndResend': 'Zapisz i wyślij ponownie',
+  'chat.regenerate': 'Wygeneruj ponownie',
   'chat.composerPlaceholder':
       'Opisz projekt, który chcesz stworzyć — wklej obrazy lub użyj @, aby wskazać plik lub skill…',
   'chat.composerHint':

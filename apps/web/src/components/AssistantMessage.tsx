@@ -78,6 +78,7 @@ interface Props {
   // to AssistantMessage; ProjectView wires it into onSend.
   onSubmitForm?: (text: string) => void;
   onContinueRemainingTasks?: (todos: TodoItem[]) => void;
+  onRegenerate?: () => void;
   onFeedback?: (change: ChatMessageFeedbackChange) => void;
   suppressDirectionForms?: boolean;
 }
@@ -105,6 +106,7 @@ export function AssistantMessage({
   nextUserContent,
   onSubmitForm,
   onContinueRemainingTasks,
+  onRegenerate,
   onFeedback,
   suppressDirectionForms = false,
 }: Props) {
@@ -146,6 +148,21 @@ export function AssistantMessage({
     !!isLast &&
     unfinishedTodos.length > 0 &&
     !!onContinueRemainingTasks;
+  const canRegenerate =
+    !streaming &&
+    !!isLast &&
+    !!onRegenerate;
+  const regenerateControl = canRegenerate ? (
+    <button
+      type="button"
+      className="assistant-footer-action"
+      onClick={onRegenerate}
+      aria-label={t("chat.regenerate")}
+      title={t("chat.regenerate")}
+    >
+      <Icon name="reload" size={13} />
+    </button>
+  ) : null;
   const showFeedback =
     !!onFeedback &&
     isFeedbackEligible({
@@ -162,7 +179,8 @@ export function AssistantMessage({
     !!message.endedAt ||
     !!usage ||
     unfinishedTodos.length > 0 ||
-    hasEmptyResponse;
+    hasEmptyResponse ||
+    canRegenerate;
   // Track which forms the user submitted in this session so we lock them
   // immediately on click (without waiting for the parent to re-render).
   const [locallySubmitted, setLocallySubmitted] = useState<Set<string>>(
@@ -282,6 +300,7 @@ export function AssistantMessage({
                   usage,
                   hasUnfinishedTodos: unfinishedTodos.length > 0,
                   hasEmptyResponse,
+                  actionControls: regenerateControl,
                   forceVisible: true,
                 }}
               />
@@ -294,6 +313,7 @@ export function AssistantMessage({
                 usage={usage}
                 hasUnfinishedTodos={unfinishedTodos.length > 0}
                 hasEmptyResponse={hasEmptyResponse}
+                actionControls={regenerateControl}
               />
             )}
           </div>
@@ -429,6 +449,7 @@ interface AssistantFooterProps {
   hasUnfinishedTodos: boolean;
   hasEmptyResponse: boolean;
   feedbackControls?: ReactNode;
+  actionControls?: ReactNode;
   forceVisible?: boolean;
 }
 
@@ -441,6 +462,7 @@ function AssistantFooter({
   hasUnfinishedTodos,
   hasEmptyResponse,
   feedbackControls,
+  actionControls,
   forceVisible = false,
 }: AssistantFooterProps) {
   const t = useT();
@@ -460,7 +482,8 @@ function AssistantFooter({
     !elapsed &&
     !usage &&
     !hasUnfinishedTodos &&
-    !hasEmptyResponse
+    !hasEmptyResponse &&
+    !actionControls
   )
     return null;
   return (
@@ -493,6 +516,9 @@ function AssistantFooter({
           : ""}
       </span>
       {feedbackControls}
+      {actionControls ? (
+        <span className="assistant-footer-actions">{actionControls}</span>
+      ) : null}
     </div>
   );
 }

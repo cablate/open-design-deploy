@@ -751,6 +751,7 @@ export const ar: Dict = {
   'chat.copyDone': 'تم النسخ!',
   'chat.editAndResend': 'تعديل وإعادة الإرسال',
   'chat.saveAndResend': 'حفظ وإعادة الإرسال',
+  'chat.regenerate': 'إعادة التوليد',
   'chat.composerPlaceholder':
     'صف التصميم الذي تريده - الصق أو اسحب الصور، أو @ لملف أو مهارة...',
   'chat.composerHint':
