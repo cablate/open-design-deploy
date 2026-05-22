@@ -5772,7 +5772,7 @@ function HtmlViewer({
                 <button
                   type="button"
                   className={`viewer-action artifact-tool-menu-trigger${
-                    selectedPalette || palettePopoverOpen || inspectMode || manualEditMode ? ' active' : ''
+                    selectedPalette || palettePopoverOpen || inspectMode ? ' active' : ''
                   }`}
                   aria-haspopup="menu"
                   aria-expanded={manualToolsOpen}
@@ -5840,18 +5840,6 @@ function HtmlViewer({
                       <Icon name="tweaks" size={13} />
                       <span>Inspect style</span>
                     </button>
-                    <button
-                      className={`artifact-tool-menu-item${manualEditMode ? ' active' : ''}`}
-                      type="button"
-                      data-testid="manual-edit-mode-toggle"
-                      title="Edit content"
-                      role="menuitem"
-                      aria-pressed={manualEditMode}
-                      onClick={activateManualEditTool}
-                    >
-                      <Icon name="edit" size={13} />
-                      <span>Edit content</span>
-                    </button>
                   </div>
                 ) : null}
                 <PaletteTweaks
@@ -5884,6 +5872,17 @@ function HtmlViewer({
                   onClose={() => setPalettePopoverOpen(false)}
                 />
               </div>
+              <button
+                className={`viewer-action${manualEditMode ? ' active' : ''}`}
+                type="button"
+                data-testid="manual-edit-mode-toggle"
+                title="Edit content"
+                aria-pressed={manualEditMode}
+                onClick={activateManualEditTool}
+              >
+                <RemixIcon name="edit-line" size={15} />
+                <span>Edit</span>
+              </button>
               {source !== null && mode === 'preview' ? (
                 <div className="zoom-menu viewer-toolbar-zoom" ref={zoomMenuRef}>
                   <button
