@@ -5,7 +5,7 @@ use launcher_core::{
 use std::path::PathBuf;
 
 #[test]
-fn namespace_matches_sidecar_namespace_rules() {
+fn namespace_rules_match() {
     assert_eq!(Namespace::new("release-beta-win").unwrap().as_str(), "release-beta-win");
     assert!(Namespace::new("").is_err());
     assert!(Namespace::new(" beta").is_err());
@@ -14,7 +14,7 @@ fn namespace_matches_sidecar_namespace_rules() {
 }
 
 #[test]
-fn path_layout_is_channel_then_namespace_scoped() {
+fn path_layout_scopes_namespace() {
     let identity = LauncherIdentity::new(ReleaseChannel::Beta, Namespace::new("release-beta-win").unwrap());
     let paths = LauncherPathLayout::from_data_root(PathBuf::from("C:/Users/example/AppData/Roaming"), &identity);
 
@@ -29,7 +29,7 @@ fn path_layout_is_channel_then_namespace_scoped() {
 }
 
 #[test]
-fn pending_plan_promotes_pending_and_keeps_current_as_previous() {
+fn pending_plan_promotes() {
     let current = StatePointer::new(
         "0.8.0-beta.6",
         "versions/0.8.0-beta.6/payload",
@@ -57,7 +57,7 @@ fn pending_plan_promotes_pending_and_keeps_current_as_previous() {
 }
 
 #[test]
-fn payload_manifest_is_target_agnostic_but_platform_bound() {
+fn manifest_checks_platform() {
     let manifest = PayloadManifest::new(
         "0.8.0-beta.7",
         "win32",

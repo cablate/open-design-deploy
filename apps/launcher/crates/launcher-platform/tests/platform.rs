@@ -12,7 +12,7 @@ fn temp_root(name: &str) -> PathBuf {
 }
 
 #[test]
-fn lock_is_exclusive_until_dropped() {
+fn lock_stays_exclusive() {
     let root = temp_root("lock");
     let lock_path = root.join("state").join("lock");
     let lock = LauncherLock::acquire(&lock_path).unwrap();
@@ -25,7 +25,7 @@ fn lock_is_exclusive_until_dropped() {
 }
 
 #[test]
-fn ensure_layout_creates_launcher_directories() {
+fn layout_creates_dirs() {
     let root = temp_root("layout");
     let identity = LauncherIdentity::new(ReleaseChannel::Preview, Namespace::new("preview-local").unwrap());
     let paths = LauncherPathLayout::from_data_root(&root, &identity);

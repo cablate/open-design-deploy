@@ -23,3 +23,12 @@ Follow the root `AGENTS.md` and `apps/AGENTS.md` first. This app owns the native
 - Keep platform-specific OS behavior in `crates/launcher-platform`.
 - Keep state and manifest DTOs in `crates/launcher-core`.
 - Windows launcher builds must embed an `.ico` through the `OD_LAUNCHER_WIN_ICON` build input, defaulting to `tools/pack/resources/win/icon.ico`.
+
+## Common commands
+
+```bash
+cargo fmt --manifest-path apps/launcher/Cargo.toml --check
+cargo test --manifest-path apps/launcher/Cargo.toml --workspace
+cargo build --manifest-path apps/launcher/Cargo.toml --release
+cargo run --manifest-path apps/launcher/Cargo.toml -- --print-paths --json --channel beta --namespace release-beta-win
+```
