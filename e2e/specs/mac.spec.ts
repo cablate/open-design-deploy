@@ -233,7 +233,17 @@ macDescribe('packaged mac runtime smoke', () => {
         expect(value.health.version).toEqual(expect.any(String));
       }
 
-      const popup = await openReadyUpdaterPrompt(updaterFixture.info.version);
+      const updaterVersion = updaterFixture.info.version;
+      const readyUpdate = await waitForUpdaterStatus(
+        (status) =>
+          status.update?.state === 'downloaded' &&
+          status.update.availableVersion === updaterVersion &&
+          typeof status.update.downloadPath === 'string',
+        'ready updater prompt update downloaded',
+      );
+      expect(readyUpdate.update?.downloadPath).toEqual(expect.any(String));
+
+      const popup = await openReadyUpdaterPrompt(updaterVersion);
       expect(popup.visible).toBe(true);
       expect(popup.title).toEqual(expect.any(String));
       expect(popup.title?.trim().length).toBeGreaterThan(0);
@@ -1672,6 +1682,26 @@ async function waitForHealthyDesktop(): Promise<MacInspectResult> {
   throw new Error(`packaged mac runtime did not become healthy: ${formatUnknown(lastResult)}`);
 }
 
+async function waitForUpdaterStatus(
+  predicate: (inspect: MacInspectResult) => boolean,
+  label: string,
+  timeoutMs = 120_000,
+): Promise<MacInspectResult> {
+  const startedAt = Date.now();
+  let lastResult: unknown = null;
+  while (Date.now() - startedAt < timeoutMs) {
+    try {
+      const inspect = await runToolsPackJson<MacInspectResult>('inspect', ['--update-action', 'status']);
+      lastResult = inspect;
+      if (predicate(inspect)) return inspect;
+    } catch (error) {
+      lastResult = error;
+    }
+    await delay(750);
+  }
+  throw new Error(`${label}: updater status timed out: ${formatUnknown(lastResult)}`);
+}
+
 async function openReadyUpdaterPrompt(version: string): Promise<UpdaterPopupEvalValue> {
   await clickUpdaterRailButton('open ready updater prompt');
   return await waitForUpdaterPopupMatching(
@@ -1680,10 +1710,21 @@ async function openReadyUpdaterPrompt(version: string): Promise<UpdaterPopupEval
   );
 }
 
-async function clickUpdaterRailButton(label: string): Promise<void> {
-  const click = await runToolsPackJson<MacInspectResult>('inspect', ['--expr', clickUpdaterRailExpression]);
-  const value = assertUpdaterClickEvalValue(click.eval?.value);
-  expect(value.clicked, `${label}: ${value.reason ?? 'updater rail not clicked'}`).toBe(true);
+async function clickUpdaterRailButton(label: string, timeoutMs = 90_000): Promise<void> {
+  const startedAt = Date.now();
+  let lastResult: unknown = null;
+  while (Date.now() - startedAt < timeoutMs) {
+    try {
+      const click = await runToolsPackJson<MacInspectResult>('inspect', ['--expr', clickUpdaterRailExpression]);
+      const value = assertUpdaterClickEvalValue(click.eval?.value);
+      lastResult = value;
+      if (value.clicked) return;
+    } catch (error) {
+      lastResult = error;
+    }
+    await delay(750);
+  }
+  throw new Error(`${label}: updater rail did not become clickable: ${formatUnknown(lastResult)}`);
 }
 
 async function waitForUpdaterPopupMatching(
