@@ -742,6 +742,7 @@
   letter-spacing: -0.01em;
   white-space: nowrap;
   overflow: hidden;
+  padding-left: 1px;
   text-overflow: ellipsis;
   flex: 0 1 auto;
   min-width: 0;
@@ -1247,4 +1248,3 @@ a.avatar-item:visited {
   outline: 2px solid var(--accent);
   outline-offset: -2px;
 }
-
