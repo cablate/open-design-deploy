@@ -5897,7 +5897,6 @@ function HtmlViewer({
                     }}
                   >
                     <span style={{ fontVariantNumeric: 'tabular-nums' }}>{zoom}%</span>
-                    <RemixIcon name="arrow-down-s-line" size={14} />
                   </button>
                   {zoomMenuOpen ? (
                     <div className="zoom-menu-popover" role="menu">

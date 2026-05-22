@@ -1191,17 +1191,16 @@ code {
 .zoom-menu-item:hover { background: var(--bg-subtle); }
 .zoom-menu-item.active { color: var(--accent-strong); font-weight: 600; }
 .viewer-toolbar-zoom .zoom-trigger {
-  min-width: 66px;
-  justify-content: space-between;
-  padding: 5px 8px 5px 10px;
-  border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--bg-panel) 92%, transparent);
+  min-width: 56px;
+  justify-content: center;
+  padding: 5px 10px;
+  border: 1px solid transparent;
+  background: transparent;
   color: var(--text);
 }
 .viewer-toolbar-zoom .zoom-trigger:hover:not(:disabled),
 .viewer-toolbar-zoom .zoom-trigger[aria-expanded='true'] {
-  border-color: var(--border-strong);
-  background: var(--bg-panel);
+  background: var(--bg-subtle);
 }
 .viewer-toolbar-zoom .zoom-menu-popover {
   left: auto;
