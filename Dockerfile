@@ -1,1 +1,2 @@
 FROM docker.io/vanjayak/open-design:latest
+EXPOSE 7456
