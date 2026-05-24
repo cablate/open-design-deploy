@@ -1,22 +1,30 @@
 #!/bin/sh
 set -e
 
-PASSWORD="${OD_BASIC_AUTH_PASSWORD:-$(openssl rand -base64 12)}"
-USERNAME="${OD_BASIC_AUTH_USERNAME:-admin}"
-
-htpasswd -b -c /etc/nginx/.htpasswd "${USERNAME}" "${PASSWORD}"
-
+# Print credentials to deploy log (first time or env-var override)
 echo ""
-echo "==================== BASIC AUTH ===================="
-echo "  URL:      https://open-design-deploy-v2.zeabur.app"
-echo "  Username: ${USERNAME}"
-echo "  Password: ${PASSWORD}"
-echo "  (Change via OD_BASIC_AUTH_USERNAME / OD_BASIC_AUTH_PASSWORD env vars)"
-echo "===================================================="
+echo "============================================"
+echo "  Open Design — Auth Service"
+echo "  Username: ${OD_AUTH_USERNAME:-admin}"
+echo "  Password: ${OD_AUTH_PASSWORD:-auto-generated}"
+echo "  (Set OD_AUTH_USERNAME / OD_AUTH_PASSWORD env vars to control)"
+echo "============================================"
 echo ""
 
-export OD_PORT=7457
+# ── Start auth service (background) ──
+node /auth-server.js &
+AUTH_PID=$!
+echo "Auth service started (PID $AUTH_PID)"
 
+# ── Start nginx (background) ──
 nginx -g "daemon off;" &
+NGINX_PID=$!
+echo "Nginx started (PID $NGINX_PID)"
 
+# Give services a moment to initialize
+sleep 2
+
+# ── Start Open Design daemon on internal port 7457 ──
+export OD_PORT=7457
+echo "Starting Open Design daemon on port 7457..."
 exec node apps/daemon/dist/cli.js --no-open
