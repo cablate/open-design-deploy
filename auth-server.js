@@ -88,8 +88,9 @@ const HTML_LOGIN = `<!DOCTYPE html>
   .msg {
     display:none; padding:.7rem; border-radius:8px; font-size:.85rem; margin-bottom:1rem;
   }
-  .msg.error { display:block; background:#7f1d1d; color:#fca5a5; border:1px solid #991b1b; }
-  .msg.logout { display:block; background:#14532d; color:#86efac; border:1px solid #166534; }
+  /* Visibility controlled by JS inline style, not by CSS display */
+  .msg.error { background:#7f1d1d; color:#fca5a5; border:1px solid #991b1b; }
+  .msg.logout { background:#14532d; color:#86efac; border:1px solid #166534; }
   label { display:block; font-size:.8rem; color:#94a3b8; margin-bottom:.3rem; font-weight:500; }
   input[type="text"], input[type="password"] {
     width:100%; padding:.7rem .85rem;
